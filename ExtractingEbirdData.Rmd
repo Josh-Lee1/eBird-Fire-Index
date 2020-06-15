@@ -12,3 +12,7 @@ head(baa)
 
 ```
 
+```{r}
+tail(baa)
+```
+
