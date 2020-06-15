@@ -1,9 +1,9 @@
 ---
-title: "Extracting eBird Data"
+title: "eBird and Fire"
 output: html_notebook
 ---
 
-This is the head
+
 
 ```{r}
 system("less -n1 RawData/ebd_AU_relApr-2020.txt 2>&1", intern = FALSE, show.output.on.console = TRUE)
@@ -11,20 +11,32 @@ baa<- read.delim("RawData/baa.csv", header = TRUE, sep="\t")
 head(baa)
 
 ```
-#Filtering unwanted checklists
+# Filtering unwanted checklists
+## Protocol used for filtering:  
+Removed Incomplete checklists
+Removed checklists Duration.Minutes less than 10m and more than 5hrs
+Removed Checklists Effort.Distance more than 10km  
+# Selecting wanted columns
+## Protocol:  
+Keeping Locality ID, Sampling event identifier  
+# Selecting distinct rows
+## Protocol
+Removing duplicates 
+```{r}
+library(dplyr)
+baatrimmed<- baa %>% 
+  filter(ALL.SPECIES.REPORTED==1, EFFORT.DISTANCE.KM<10, DURATION.MINUTES<300, DURATION.MINUTES>10) %>% 
+  select(SAMPLING.EVENT.IDENTIFIER, LOCALITY.ID) %>% 
+  distinct()
+```
+
 ```{r}
 
 ```
-#Selecing wanted columns
-```{r}
 
-```
-#Selecting distinct rows
-```{r}
+# Spacial Processing steps:
 
-```
-#Spacial Processing
-#Read in fire shapefile
+# Read in fire shapefile
 ```{r}
 
 ```
@@ -32,7 +44,7 @@ head(baa)
 ```{r}
 
 ```
-#Convert ebird checklists to sf object with CRS code from fire shapefile
+# Convert ebird checklists to sf object with CRS code from fire shapefile
 ```{r}
 
 ```
@@ -40,16 +52,16 @@ head(baa)
 ```{r}
 
 ```
-#add column for inside/outside using st_join
+# add column for inside/outside using st_join
 ```{r}
 
 ```
-#make a map with points coloured by inside/outside
+# make a map with points coloured by inside/outside
 ```{r}
 
 ```
 
-#write out as rds to a directory called proceessed_data
+# write out as rds to a directory called proceessed_data
 ```{r}
 
 ```
