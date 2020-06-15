@@ -17,46 +17,57 @@ Removed Incomplete checklists
 Removed checklists Duration.Minutes less than 10m and more than 5hrs
 Removed Checklists Effort.Distance more than 10km  
 # Selecting wanted columns
-## Protocol:  
-Keeping Locality ID, Sampling event identifier  
+Keeping Locality ID, Sampling event identifier, Lat and Long, Date
 # Selecting distinct rows
-## Protocol
 Removing duplicates 
 ```{r}
 library(dplyr)
 baatrimmed<- baa %>% 
   filter(ALL.SPECIES.REPORTED==1, EFFORT.DISTANCE.KM<10, DURATION.MINUTES<300, DURATION.MINUTES>10) %>% 
-  select(SAMPLING.EVENT.IDENTIFIER, LOCALITY.ID) %>% 
+  select(SAMPLING.EVENT.IDENTIFIER, LOCALITY.ID, LATITUDE, LONGITUDE, OBSERVATION.DATE) %>% 
   distinct()
-```
-
-```{r}
-
 ```
 
 # Spacial Processing steps:
 
-# Read in fire shapefile
+## Read in fire shapefile
+```{r}
+install.packages("sf")
+library(sf)
+fireshape<- st_read("National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211/National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211.shp")
+```
+
+
+## Map of shapefile
+```{r}
+library(ggplot2)
+ggplot() + 
+  geom_sf(data = fireshape, size = 0.1, color = "black", fill = "black") + 
+  ggtitle("Fire Boundary Plot") + 
+  coord_sf()
+```
+## Convert ebird checklists to sf object with CRS code from fire shapefile
+Make the eBird data a sf object, then match CRS(Coordinate Reference System) with fire shapefile
+```{r}
+baaspatial <- baatrimmed %>%
+    st_as_sf() %>%
+    st_transform(crs=st_crs(fireshape))
+?st_transform
+
+st_as_sf(baatrimmed)
+
+crs=st_crs(fireshape)
+saveRDS("eBird_fire.RDS")
+```
+## Make a map of the points using ggplot and geom_sf on the fire shapefile map
 ```{r}
 
 ```
-# Map of shapefile
+## add column for inside/outside using st_join
 ```{r}
 
 ```
-# Convert ebird checklists to sf object with CRS code from fire shapefile
-```{r}
-
-```
-# Make a map of the points using ggplot and geom_sf on the fire shapefile map
-```{r}
-
-```
-# add column for inside/outside using st_join
-```{r}
-
-```
-# make a map with points coloured by inside/outside
+## make a map with points coloured by inside/outside
 ```{r}
 
 ```
