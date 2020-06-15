@@ -11,8 +11,45 @@ baa<- read.delim("RawData/baa.csv", header = TRUE, sep="\t")
 head(baa)
 
 ```
-This is the tail
+#Filtering unwanted checklists
 ```{r}
-tail(baa)
+
+```
+#Selecing wanted columns
+```{r}
+
+```
+#Selecting distinct rows
+```{r}
+
+```
+#Spacial Processing
+#Read in fire shapefile
+```{r}
+
+```
+# Map of shapefile
+```{r}
+
+```
+#Convert ebird checklists to sf object with CRS code from fire shapefile
+```{r}
+
+```
+# Make a map of the points using ggplot and geom_sf on the fire shapefile map
+```{r}
+
+```
+#add column for inside/outside using st_join
+```{r}
+
+```
+#make a map with points coloured by inside/outside
+```{r}
+
 ```
 
+#write out as rds to a directory called proceessed_data
+```{r}
+
+```
