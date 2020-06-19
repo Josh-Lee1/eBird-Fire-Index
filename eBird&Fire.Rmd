@@ -75,25 +75,25 @@ View(pointsinout)
 count(pointsinout, Id)
 list(pointsinout$Id)
 
+#### Plotting didnt like the NAs or 0s so had to convert to 1s(Inside burnt zone) and 2s(Outside burnt zone)
+
 inout<- replace.value(pointsinout, "Id", from = 0, to = 1)
 inout[is.na(inout)] = 0
-count(inout, Id)
 inout1<- replace.value(inout, "Id", from = 0, to = 2)
+count(inout, Id)
 ```
 
 
 ## make a map with points coloured by inside/outside
 ```{r}
-ggplot() + 
+MapbyInOut<- ggplot() + 
   geom_sf(data = fireshape, size = 0.1, color = "blue", fill = "blue") + 
   geom_sf(data=inout1, size=0.5, colour = inout1$Id)+
   ggtitle("Points by In-Out") + 
   coord_sf()
-  
-display.brewer.pal(n = 2, name = "Set2")
 ```
 
 # write out as rds to a directory called proceessed_data
 ```{r}
-
+saveRDS(MapbyInOut, "MapbyInOut.rds")
 ```
