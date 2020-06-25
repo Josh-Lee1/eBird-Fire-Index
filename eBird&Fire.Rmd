@@ -85,15 +85,18 @@ count(inout, Id)
 
 
 ## make a map with points coloured by inside/outside
+Blue=Fire extent, Red=Checklists outisde, Black=Checklists Inside
 ```{r}
 MapbyInOut<- ggplot() + 
   geom_sf(data = fireshape, size = 0.1, color = "blue", fill = "blue") + 
   geom_sf(data=inout1, size=0.5, colour = inout1$Id)+
   ggtitle("Points by In-Out") + 
   coord_sf()
+print(MapbyInOut)
 ```
 
-# write out as rds to a directory called proceessed_data
+# write out as rds to a directory called processed_data
 ```{r}
-saveRDS(MapbyInOut, "MapbyInOut.rds")
+dir.create("processed_data")
+saveRDS(MapbyInOut, "processed_data/MapbyInOut.rds")
 ```
