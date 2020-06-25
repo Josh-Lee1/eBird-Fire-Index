@@ -11,7 +11,6 @@ read_and_process_raw_ebird <- function(filename,fireshape=fireshape){
     filter(ALL.SPECIES.REPORTED==1, EFFORT.DISTANCE.KM<10, DURATION.MINUTES<300, DURATION.MINUTES>10) %>% 
     dplyr::select(SAMPLING.EVENT.IDENTIFIER, LOCALITY.ID, LATITUDE, LONGITUDE, OBSERVATION.DATE) %>% 
     distinct()
-  baatrimmed<-slice_sample(baatrimmed,n = 5)
   ebird_points <- st_as_sf(baatrimmed, coords=c("LONGITUDE", "LATITUDE"), crs=st_crs(fireshape))
   pointsinout<-st_join(ebird_points, fireshape, join = st_within)
   saveRDS(pointsinout,file = paste0("filteredData/",filename, ".rds"))
