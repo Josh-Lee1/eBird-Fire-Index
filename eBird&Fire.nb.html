@@ -1751,25 +1751,68 @@ summary {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5zdGFsbC5wYWNrYWdlcyhcIlJDb2xvckJyZXdlclwiKVxuXG5gYGAifQ== -->
-<pre class="r"><code>install.packages(&quot;RColorBrewer&quot;)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkcGx5cilcbmBgYCJ9 -->
+<pre class="r"><code>library(dplyr)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV0FSTklORzogUnRvb2xzIGlzIHJlcXVpcmVkIHRvIGJ1aWxkIFIgcGFja2FnZXMgYnV0IGlzIG5vdCBjdXJyZW50bHkgaW5zdGFsbGVkLiBQbGVhc2UgZG93bmxvYWQgYW5kIGluc3RhbGwgdGhlIGFwcHJvcHJpYXRlIHZlcnNpb24gb2YgUnRvb2xzIGJlZm9yZSBwcm9jZWVkaW5nOlxuXG5odHRwczovL2NyYW4ucnN0dWRpby5jb20vYmluL3dpbmRvd3MvUnRvb2xzL1xuSW5zdGFsbGluZyBwYWNrYWdlIGludG8g46S847ixQzovVXNlcnMvZXVwaG8vRG9jdW1lbnRzL1Ivd2luLWxpYnJhcnkvNC4w46S847iyXG4oYXMg46S847ixbGli46S847iyIGlzIHVuc3BlY2lmaWVkKVxudHJ5aW5nIFVSTCAnaHR0cHM6Ly9jcmFuLnJzdHVkaW8uY29tL2Jpbi93aW5kb3dzL2NvbnRyaWIvNC4wL1JDb2xvckJyZXdlcl8xLjEtMi56aXAnXG5Db250ZW50IHR5cGUgJ2FwcGxpY2F0aW9uL3ppcCcgbGVuZ3RoIDU1NTgzIGJ5dGVzICg1NCBLQilcbmRvd25sb2FkZWQgNTQgS0JcbiJ9 -->
-<pre><code>WARNING: Rtools is required to build R packages but is not currently installed. Please download and install the appropriate version of Rtools before proceeding:
+<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog46S847ixZHBseXLjpLzjuLJcblxuVGhlIGZvbGxvd2luZyBvYmplY3RzIGFyZSBtYXNrZWQgZnJvbSDjpLzjuLFwYWNrYWdlOnN0YXRz46S847iyOlxuXG4gICAgZmlsdGVyLCBsYWdcblxuVGhlIGZvbGxvd2luZyBvYmplY3RzIGFyZSBtYXNrZWQgZnJvbSDjpLzjuLFwYWNrYWdlOmJhc2XjpLzjuLI6XG5cbiAgICBpbnRlcnNlY3QsIHNldGRpZmYsIHNldGVxdWFsLCB1bmlvblxuIn0= -->
+<pre><code>
+Attaching package: 㤼㸱dplyr㤼㸲
 
-https://cran.rstudio.com/bin/windows/Rtools/
-Installing package into 㤼㸱C:/Users/eupho/Documents/R/win-library/4.0㤼㸲
-(as 㤼㸱lib㤼㸲 is unspecified)
-trying URL &#39;https://cran.rstudio.com/bin/windows/contrib/4.0/RColorBrewer_1.1-2.zip&#39;
-Content type &#39;application/zip&#39; length 55583 bytes (54 KB)
-downloaded 54 KB</code></pre>
+The following objects are masked from 㤼㸱package:stats㤼㸲:
+
+    filter, lag
+
+The following objects are masked from 㤼㸱package:base㤼㸲:
+
+    intersect, setdiff, setequal, union</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoicGFja2FnZSDigJhSQ29sb3JCcmV3ZXLigJkgc3VjY2Vzc2Z1bGx5IHVucGFja2VkIGFuZCBNRDUgc3VtcyBjaGVja2VkXG5cblRoZSBkb3dubG9hZGVkIGJpbmFyeSBwYWNrYWdlcyBhcmUgaW5cblx0QzpcXFVzZXJzXFxldXBob1xcQXBwRGF0YVxcTG9jYWxcXFRlbXBcXFJ0bXBzcHdQbG1cXGRvd25sb2FkZWRfcGFja2FnZXNcbiJ9 -->
-<pre><code>package ‘RColorBrewer’ successfully unpacked and MD5 sums checked
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShnZ3Bsb3QyKVxubGlicmFyeShzZilcbmBgYCJ9 -->
+<pre class="r"><code>library(ggplot2)
+library(sf)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiTGlua2luZyB0byBHRU9TIDMuOC4wLCBHREFMIDMuMC40LCBQUk9KIDYuMy4xXG4ifQ== -->
+<pre><code>Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5gYGAifQ== -->
+<pre class="r"><code>library(tidyverse)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUmVnaXN0ZXJlZCBTMyBtZXRob2RzIG92ZXJ3cml0dGVuIGJ5ICdkYnBseXInOlxuICBtZXRob2QgICAgICAgICBmcm9tXG4gIHByaW50LnRibF9sYXp5ICAgICBcbiAgcHJpbnQudGJsX3NxbCAgICAgIFxuXHUwMDFiWzMwbS0tIFx1MDAxYlsxbUF0dGFjaGluZyBwYWNrYWdlc1x1MDAxYlsyMm0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tIHRpZHl2ZXJzZSAxLjMuMCAtLVx1MDAxYlszOW1cblx1MDAxYlszMG1cdTAwMWJbMzJtdlx1MDAxYlszMG0gXHUwMDFiWzM0bXRpYmJsZSBcdTAwMWJbMzBtIDMuMC4xICAgICBcdTAwMWJbMzJtdlx1MDAxYlszMG0gXHUwMDFiWzM0bXB1cnJyICBcdTAwMWJbMzBtIDAuMy40XG5cdTAwMWJbMzJtdlx1MDAxYlszMG0gXHUwMDFiWzM0bXRpZHlyICBcdTAwMWJbMzBtIDEuMS4wICAgICBcdTAwMWJbMzJtdlx1MDAxYlszMG0gXHUwMDFiWzM0bXN0cmluZ3JcdTAwMWJbMzBtIDEuNC4wXG5cdTAwMWJbMzJtdlx1MDAxYlszMG0gXHUwMDFiWzM0bXJlYWRyICBcdTAwMWJbMzBtIDEuMy4xICAgICBcdTAwMWJbMzJtdlx1MDAxYlszMG0gXHUwMDFiWzM0bWZvcmNhdHNcdTAwMWJbMzBtIDAuNS4wXHUwMDFiWzM5bVxuXHUwMDFiWzMwbS0tIFx1MDAxYlsxbUNvbmZsaWN0c1x1MDAxYlsyMm0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tIHRpZHl2ZXJzZV9jb25mbGljdHMoKSAtLVxuXHUwMDFiWzMxbXhcdTAwMWJbMzBtIFx1MDAxYlszNG1kcGx5clx1MDAxYlszMG06Olx1MDAxYlszMm1maWx0ZXIoKVx1MDAxYlszMG0gbWFza3MgXHUwMDFiWzM0bXN0YXRzXHUwMDFiWzMwbTo6ZmlsdGVyKClcblx1MDAxYlszMW14XHUwMDFiWzMwbSBcdTAwMWJbMzRtZHBseXJcdTAwMWJbMzBtOjpcdTAwMWJbMzJtbGFnKClcdTAwMWJbMzBtICAgIG1hc2tzIFx1MDAxYlszNG1zdGF0c1x1MDAxYlszMG06OmxhZygpXHUwMDFiWzM5bVxuIn0= -->
+<pre><code>Registered S3 methods overwritten by &#39;dbplyr&#39;:
+  method         from
+  print.tbl_lazy     
+  print.tbl_sql      
+[30m-- [1mAttaching packages[22m --------------------------------------- tidyverse 1.3.0 --[39m
+[30m[32mv[30m [34mtibble [30m 3.0.1     [32mv[30m [34mpurrr  [30m 0.3.4
+[32mv[30m [34mtidyr  [30m 1.1.0     [32mv[30m [34mstringr[30m 1.4.0
+[32mv[30m [34mreadr  [30m 1.3.1     [32mv[30m [34mforcats[30m 0.5.0[39m
+[30m-- [1mConflicts[22m ------------------------------------------ tidyverse_conflicts() --
+[31mx[30m [34mdplyr[30m::[32mfilter()[30m masks [34mstats[30m::filter()
+[31mx[30m [34mdplyr[30m::[32mlag()[30m    masks [34mstats[30m::lag()[39m</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShhbmNob3JzKVxuYGBgIn0= -->
+<pre class="r"><code>library(anchors)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiByZ2Vub3VkXG4jIyAgcmdlbm91ZCAoVmVyc2lvbiA1LjgtMy4wLCBCdWlsZCBEYXRlOiAyMDE5LTAxLTIyKVxuIyMgIFNlZSBodHRwOi8vc2VraG9uLmJlcmtlbGV5LmVkdS9yZ2Vub3VkIGZvciBhZGRpdGlvbmFsIGRvY3VtZW50YXRpb24uXG4jIyAgUGxlYXNlIGNpdGUgc29mdHdhcmUgYXM6XG4jIyAgIFdhbHRlciBNZWJhbmUsIEpyLiBhbmQgSmFzamVldCBTLiBTZWtob24uIDIwMTEuXG4jIyAgIGBgR2VuZXRpYyBPcHRpbWl6YXRpb24gVXNpbmcgRGVyaXZhdGl2ZXM6IFRoZSByZ2Vub3VkIHBhY2thZ2UgZm9yIFIuJydcbiMjICAgSm91cm5hbCBvZiBTdGF0aXN0aWNhbCBTb2Z0d2FyZSwgNDIoMTEpOiAxLTI2LiBcbiMjXG5cbkxvYWRpbmcgcmVxdWlyZWQgcGFja2FnZTogTUFTU1xuXG5BdHRhY2hpbmcgcGFja2FnZTog46S847ixTUFTU+OkvOO4slxuXG5UaGUgZm9sbG93aW5nIG9iamVjdCBpcyBtYXNrZWQgZnJvbSDjpLzjuLFwYWNrYWdlOmRwbHly46S847iyOlxuXG4gICAgc2VsZWN0XG5cblxuIyMgIGFuY2hvcnMgKFZlcnNpb24gMy4wLTgsIEJ1aWxkIERhdGU6IDIwMTQtMDItMjQpXG4jIyAgU2VlIGh0dHA6Ly93YW5kLnN0YW5mb3JkLmVkdS9hbmNob3JzIGZvciBhZGRpdGlvbmFsIGRvY3VtZW50YXRpb24gYW5kIHN1cHBvcnQuXG4ifQ== -->
+<pre><code>Loading required package: rgenoud
+##  rgenoud (Version 5.8-3.0, Build Date: 2019-01-22)
+##  See http://sekhon.berkeley.edu/rgenoud for additional documentation.
+##  Please cite software as:
+##   Walter Mebane, Jr. and Jasjeet S. Sekhon. 2011.
+##   ``Genetic Optimization Using Derivatives: The rgenoud package for R.&#39;&#39;
+##   Journal of Statistical Software, 42(11): 1-26. 
+##
 
-The downloaded binary packages are in
-    C:\Users\eupho\AppData\Local\Temp\RtmpspwPlm\downloaded_packages</code></pre>
+Loading required package: MASS
+
+Attaching package: 㤼㸱MASS㤼㸲
+
+The following object is masked from 㤼㸱package:dplyr㤼㸲:
+
+    select
+
+
+##  anchors (Version 3.0-8, Build Date: 2014-02-24)
+##  See http://wand.stanford.edu/anchors for additional documentation and support.</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1777,11 +1820,25 @@ The downloaded binary packages are in
 <h1>Split files using linux command line and read in first file of 100,000 lines (baa)</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3lzdGVtKFwibGVzcyAtbjEgUmF3RGF0YS9lYmRfQVVfcmVsQXByLTIwMjAudHh0IDI+JjFcIiwgaW50ZXJuID0gRkFMU0UsIHNob3cub3V0cHV0Lm9uLmNvbnNvbGUgPSBUUlVFKVxuYmFhPC0gcmVhZC5kZWxpbShcIlJhd0RhdGEvYmFhLmNzdlwiLCBoZWFkZXIgPSBUUlVFLCBzZXA9XCJcXHRcIilcbmhlYWQoYmFhKVxuXG5gYGAifQ== -->
-<pre class="r"><code>system(&quot;less -n1 RawData/ebd_AU_relApr-2020.txt 2&gt;&amp;1&quot;, intern = FALSE, show.output.on.console = TRUE)
-baa&lt;- read.delim(&quot;RawData/baa.csv&quot;, header = TRUE, sep=&quot;\t&quot;)
-head(baa)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3lzdGVtKFwibGVzcyAtbjEgUmF3RGF0YS9lYmRfQVVfcmVsQXByLTIwMjAudHh0IDI+JjFcIiwgaW50ZXJuID0gRkFMU0UsIHNob3cub3V0cHV0Lm9uLmNvbnNvbGUgPSBUUlVFKVxuYGBgIn0= -->
+<pre class="r"><code>system(&quot;less -n1 RawData/ebd_AU_relApr-2020.txt 2&gt;&amp;1&quot;, intern = FALSE, show.output.on.console = TRUE)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEyN1xuIn0= -->
+<pre><code>[1] 127</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYmFhPC0gcmVhZC5kZWxpbShcIlJhd0RhdGEvYmFhLmNzdlwiLCBoZWFkZXIgPSBUUlVFLCBzZXA9XCJcXHRcIilcbmhlYWQoYmFhKVxuYGBgIn0= -->
+<pre class="r"><code>baa&lt;- read.delim(&quot;RawData/baa.csv&quot;, header = TRUE, sep=&quot;\t&quot;)
+head(baa)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6NDcsIm5yb3ciOjZ9LCJyZGYiOiJINHNJQUFBQUFBQUFCc1ZZVFd6a1dCRjJNdWxKMHJ2WnllNWtkblpYZy9TRVZnTXMwNDcvK3NjdHhNYnQ5blE4NjI3MzJPNzBqQVFDZDdjbmJjVnRCLzhra3dPQ0N3S09DSzI0c1JKQ1FuQkVjRVRLaWNOcStia2dMcHdRRWhMaXNBY09pTU5BdWR2UDdYYVNtY2xvZ1pGNi9PcXJWL1dxNnRXclZ5OWE4d0ZiZkZBa0NPSUtzVUlzRVZjS01DU3VpbDJhS1RNRXNiSU0xQkp3MXVQdlk1aDFIUWJiOE51TXB5VU1zcWQxNnFMbnU1YmpLT1pBZmFUNnJoMk9QY2ZiUDZsTERWbHIxdFdHempBMXRzeHlWZnBTVWhVUVlla3F6VjF1TGFwYVpjdFZscjJzaFZXcXh0T1hzNUN0bHF0VmlxY3U2VmVWNXhrR25NdkY4anBEMGRVU1RaVVlGdEhWT3NQWEdXN09ZcWdTeFpUb0txSVl3T3YwR1JiRElJcXFseXQxaGozRHFpR0dyVk44bmEyY1dZdERORnZuZ0Z0WmxHSmpoVFFQQzlXWkNzQWJVMHVKbTc4bGlPVjNDRUs2VFJEaTl3aWlkSXNnNUE5em5xd0doOWJRdG9KUGtseGM0WVlRQmFGdk9yYnBvcTV2aHJZNzlCd3JZVzZJWXlzSTNTaEVobVU2Q2JpVmtWQzhmVDl5WGN0UGVLOTNyR08wNnptTzZZN2c2MW9ubGhtbTNFTExkTXh4UW15MmZQTUVOYUp3T0xiOGdlMlBjb1p0NnFIdGhMYUo3TUFjUUJxWTJDYkJOUU0wTklQUWRDME1YbGQ5eUE3MzVERUtyY2tFZkRpdzdZUjFxenMrY2V3Uk1IMDdRSzUzWkZyam1ZRzJpZjI4SVVGbUhZNmpBUGxlWU5sRDg5Q2VMM2hkOU0xaGFBK0JHM3IrMXlJempQSkJKSjc3KzhuSUxUM0FBd1lQeW1kWTZZRCtQMXY3b25McmFhTDlkNERGMVphRjNndU1Gblc4MXZFZ0R5M2ZoZlBpK3pha3kwbkN1UllmRE4yTHdqSHFtMDU2S0l2M0k4dHlnemdiRTJSdHp4NkNYR3J2cTMwNGdiSEd2Q05uTkM2YVVoQjZwWTZSRUZkalF1OW5xUHRLTTBQdHlXSkdyQy9reEJZMVgyMlkvb0dESFZ2UlRrYjRHQlgxb2VYYVE2VFpreFNKL0VkSTlPQzBKc2hMOXlBeTVpUnk5Nk5EdkNXaTU3bm1aQUJsSjU4QXNRK2xocUJoZFRPRFN0ckRaZ1lCWDBxNktHVVE4S2VrOTdTTW1yNVF1aWZsMVlpcUdsUHhpdCtFLzg3Ny9RLzRXWTl2UUd4OTd4aUp2bVVkSUpyNkRCS2g5Q1hNbXdwVVBBam1rWVU2VUtnaFpnN3F3bDRrN0xjVkV5cmZmdWk1aSt4U3FXRzdyZ21sRmdLUGQ2SHIyVzZJaE5ISXhxbjR6aXlYcG51RmR1Mzk4VEdVNTgrV1dKYXNzVFJYdTROb21pZmhzcTN4bjBzazN1cURzZEZrQUh2cDVFMWFkR3ROWWNvVm1xOVFLVTN6TE1WdytPcGRWWGlHTG5QVkxNa3pmRHFiWTNpTzRXcFpkb1dxNUJaWjZ1TEI3c1dEekJ5Q2VDV1dQaTIvMy92VStOZmZQOTM1OHg5Kzk3UGZmSEQ2QmVaZjI0V2ZySitLekhjMCtmSEhwenQvcy8vSWtYODZmYmUxOG9NdlJ0L0djanRmL1ZYdlM5cGZ5WjNCWDRpdGYvN3l1enZEMnl2OXI3L2YzeG1zYlgzcnljOC92ZlBsMzcvNzBROS8rdU9kd1FmLytQemZiOTdJV1Z1aytSbzBCM3lKcGVZSXo1WW9ycFIySkRIQ3hiMUYyazNORUpDaUt4bUVqeEdLenlDMVJQUFRDL0VhVGRlaDA2R29DL2o1N0N4Nmc4RG55ckJ4VkJaaHVYSTFiYkNtQ0UxVFRJM0tTWEhWeW9KVXVWcXIwZWZveWRVQW5hNVVhRzZlTytzNlYyUFlTam5WQmpNNG5tWExWQ1VyVWl0RGE1Z0NUS1ZjcVZIY1hFZVpvc3M4QlRITGVTaTdRM3RrdVdIYTdSUjM3U0N1eDhNVVdUZDg4OGh5NEtoZExQUlVOWXRMWHVreVZEcXNNSE9VT1cvQzR0emNLWnMyeGw5Sjc2ZkNsTVpXejVpaTBIbWUyUW1STkt1Wll2V0xYUEdhSG9WdmZCd1BWMytFdnp0dno1aDVISDh2a252V04yc1BFYitwNEE3TzJMSkZwTTMxbEpmOTRmblplRDF2WDdMVzRxb1V4MVJyR2YwWC9idG9mZng3bHZ5TDJKZVhld05KdmpVeExTajUwRllIU0lIVVEzRFlham01R3JWTlUrRVltbW5IaTBZa29pdG9aTzBqa1VSVFFVaHdCTTBNYW5qK3lQSVJaUDN3SUc0MURzaEVmcUpaaDlEdm9NRUpVc3pJdHkxWTZRaWs3aUFqRmpNRDI3MkRvSjBoN3lEYm5XR2dGcW1Ed1BLUFFPTUluZ1lqMUxTRzFtUmcrWERCUUcwano3T2RaU3RjdmtiZGFubVJNMEtLWmU1SGlXSTlqRVluU0RRbmg3bUEzSVlyTWJDT3pYMExCWjU1Z09EZDRLT0ZtM2JYQ3kwbnQ4SnQ2ZkVRTGw4NHhjanh2SU1BbVNFS2p6M2tQWXJERWxnb2ZyUUU1Rk0yNVJrMy84SWZCZ3JRQWFWTjNEYmV5WmFpTmdTRjdIWGsrejJKbEp0U3g1RHZ5bWtqczZrSXVrRktUZG1RbW1SVE1IQVBkTTBRSHFnZHRTMkxwS28xMCtscklreHBxZHBEM0FXSWFydXRkc2lPMEU0bGRWR2VMU0ptNGRmMVhrUHZTc0RUeWJOQ2IyVzQ1OHUvQ3E5MVNkc1REQmtrUmJXWGRxWnZORFFKN08rMHlMamdrSUlCSHNHRUpoYThkUzUvMFkxVm9TV1J1b1RmTzZ0VC9TbjM1WVRNYWkzb3hqeFl4U21SWlYrZGltU2lGRlBaQ1d0eVExaWdHNktXcFlzOS9XNS93WStYWnBZM0ZGVjhMMjFyVkZGUTVQazZtSVo5VHFDTkZESWVkdFBGRkFpajBVdFZyeXRxcDVVRk5yUEJ6bVRGbTRiY2xzZ01FM2JMRURUSUhXekJqQ2RwY3d2ZTFJVjJWNG5qTCszQnZwNU53WTJ1cGhxcXFDcFpFK2RnSmdRdkEzaFBFbzBzdHRuc2FUTTcyM0tuWjBoNmdyOG0zYjJyYWdiWmxNSENqaWlSNzdVVHppc0pSOUFrZ2R6Rkw1WE5UcS9kQUx1eEExalBscUFvSkU1TlRlcXFHVzgzVzVyYTY1NzFhSDBYTnFvTlNZZVZyd2xkTUgwdkZWelRwRDFaNnFmMFZUQkZWL0c5dW1Gb2NuZDZTRUF2dG1NemUzZ3lPRHpTRjh2QU90UWtFcGVDK0xKWW50V0srTkpZckJkRHh3eHd2Y0JnRVVxcVNUNkM5MVg4bEhxU0UxbjFEdU1XSFlTVzQ3OUFGbkxDUzM0T3VCYTVzU1dqMG5BY3VRZWxhbExSc2xmWjBzeXlkTHc5VzNMNTM0bXFBZzZSNWU3YkxuNG5GcHo0THpwNFE4SGpxY1Brb1E5dkV1d0pvQUVaZXBrT2F1ZzVHSm42Ump6NUQwbWpFZ1Y1RlFBQSJ9 -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["GLOBAL.UNIQUE.IDENTIFIER"],"name":[1],"type":["chr"],"align":["left"]},{"label":["LAST.EDITED.DATE"],"name":[2],"type":["chr"],"align":["left"]},{"label":["TAXONOMIC.ORDER"],"name":[3],"type":["int"],"align":["right"]},{"label":["CATEGORY"],"name":[4],"type":["chr"],"align":["left"]},{"label":["COMMON.NAME"],"name":[5],"type":["chr"],"align":["left"]},{"label":["SCIENTIFIC.NAME"],"name":[6],"type":["chr"],"align":["left"]},{"label":["SUBSPECIES.COMMON.NAME"],"name":[7],"type":["chr"],"align":["left"]},{"label":["SUBSPECIES.SCIENTIFIC.NAME"],"name":[8],"type":["chr"],"align":["left"]},{"label":["OBSERVATION.COUNT"],"name":[9],"type":["chr"],"align":["left"]},{"label":["BREEDING.BIRD.ATLAS.CODE"],"name":[10],"type":["chr"],"align":["left"]},{"label":["BREEDING.BIRD.ATLAS.CATEGORY"],"name":[11],"type":["chr"],"align":["left"]},{"label":["AGE.SEX"],"name":[12],"type":["chr"],"align":["left"]},{"label":["COUNTRY"],"name":[13],"type":["chr"],"align":["left"]},{"label":["COUNTRY.CODE"],"name":[14],"type":["chr"],"align":["left"]},{"label":["STATE"],"name":[15],"type":["chr"],"align":["left"]},{"label":["STATE.CODE"],"name":[16],"type":["chr"],"align":["left"]},{"label":["COUNTY"],"name":[17],"type":["chr"],"align":["left"]},{"label":["COUNTY.CODE"],"name":[18],"type":["chr"],"align":["left"]},{"label":["IBA.CODE"],"name":[19],"type":["lgl"],"align":["right"]},{"label":["BCR.CODE"],"name":[20],"type":["lgl"],"align":["right"]},{"label":["USFWS.CODE"],"name":[21],"type":["lgl"],"align":["right"]},{"label":["ATLAS.BLOCK"],"name":[22],"type":["lgl"],"align":["right"]},{"label":["LOCALITY"],"name":[23],"type":["chr"],"align":["left"]},{"label":["LOCALITY.ID"],"name":[24],"type":["chr"],"align":["left"]},{"label":["LOCALITY.TYPE"],"name":[25],"type":["chr"],"align":["left"]},{"label":["LATITUDE"],"name":[26],"type":["dbl"],"align":["right"]},{"label":["LONGITUDE"],"name":[27],"type":["dbl"],"align":["right"]},{"label":["OBSERVATION.DATE"],"name":[28],"type":["chr"],"align":["left"]},{"label":["TIME.OBSERVATIONS.STARTED"],"name":[29],"type":["chr"],"align":["left"]},{"label":["OBSERVER.ID"],"name":[30],"type":["chr"],"align":["left"]},{"label":["SAMPLING.EVENT.IDENTIFIER"],"name":[31],"type":["chr"],"align":["left"]},{"label":["PROTOCOL.TYPE"],"name":[32],"type":["chr"],"align":["left"]},{"label":["PROTOCOL.CODE"],"name":[33],"type":["chr"],"align":["left"]},{"label":["PROJECT.CODE"],"name":[34],"type":["chr"],"align":["left"]},{"label":["DURATION.MINUTES"],"name":[35],"type":["int"],"align":["right"]},{"label":["EFFORT.DISTANCE.KM"],"name":[36],"type":["dbl"],"align":["right"]},{"label":["EFFORT.AREA.HA"],"name":[37],"type":["dbl"],"align":["right"]},{"label":["NUMBER.OBSERVERS"],"name":[38],"type":["int"],"align":["right"]},{"label":["ALL.SPECIES.REPORTED"],"name":[39],"type":["int"],"align":["right"]},{"label":["GROUP.IDENTIFIER"],"name":[40],"type":["chr"],"align":["left"]},{"label":["HAS.MEDIA"],"name":[41],"type":["int"],"align":["right"]},{"label":["APPROVED"],"name":[42],"type":["int"],"align":["right"]},{"label":["REVIEWED"],"name":[43],"type":["int"],"align":["right"]},{"label":["REASON"],"name":[44],"type":["chr"],"align":["left"]},{"label":["TRIP.COMMENTS"],"name":[45],"type":["chr"],"align":["left"]},{"label":["SPECIES.COMMENTS"],"name":[46],"type":["chr"],"align":["left"]},{"label":["X"],"name":[47],"type":["lgl"],"align":["right"]}],"data":[{"1":"URN:CornellLabOfOrnithology:EBIRD:OBS228353471","2":"2017-10-23 17:29:24","3":"6094","4":"species","5":"Australian Pratincole","6":"Stiltia isabella","7":"","8":"","9":"X","10":"","11":"","12":"","13":"Australia","14":"AU","15":"Northern Territory","16":"AU-NT","17":"Barkly","18":"AU-NT-BAR","19":"NA","20":"NA","21":"NA","22":"NA","23":"Barrow Creek 10' Cell","24":"L2561960","25":"P","26":"-21.58333","27":"133.9167","28":"1980-09-30","29":"","30":"obsr450240","31":"S16614960","32":"Incidental","33":"P20","34":"EBIRD_AU","35":"NA","36":"NA","37":"NA","38":"NA","39":"1","40":"","41":"0","42":"1","43":"0","44":"","45":"Eremaea Birds List 7888","46":"on sewage soak near Barrow Creek Hotel","47":"NA","_rn_":"1"},{"1":"URN:CornellLabOfOrnithology:EBIRD:OBS653431714","2":"2020-02-17 02:24:14","3":"554","4":"species","5":"Chestnut Teal","6":"Anas castanea","7":"","8":"","9":"2","10":"","11":"","12":"","13":"Australia","14":"AU","15":"New South Wales","16":"AU-NSW","17":"Ryde","18":"AU-NSW-RYD","19":"NA","20":"NA","21":"NA","22":"NA","23":"Lane Cove National Park","24":"L1930244","25":"H","26":"-33.77215","27":"151.1250","28":"1993-04-14","29":"","30":"obsr345724","31":"S48236576","32":"Historical","33":"P62","34":"EBIRD","35":"NA","36":"NA","37":"NA","38":"1","39":"1","40":"","41":"0","42":"1","43":"0","44":"","45":"","46":"","47":"NA","_rn_":"2"},{"1":"URN:CornellLabOfOrnithology:EBIRD:OBS207735733","2":"2020-02-22 00:56:23","3":"17702","4":"species","5":"Australian Logrunner","6":"Orthonyx temminckii","7":"","8":"","9":"5","10":"","11":"","12":"","13":"Australia","14":"AU","15":"Queensland","16":"AU-QLD","17":"Scenic Rim","18":"AU-QLD-SCE","19":"NA","20":"NA","21":"NA","22":"NA","23":"Lamington National Park--Binna Burra","24":"L921547","25":"H","26":"-28.19913","27":"153.1880","28":"1994-10-11","29":"11:00:00","30":"obsr110280","31":"S14933506","32":"Traveling","33":"P22","34":"EBIRD_CAN","35":"180","36":"10","37":"NA","38":"2","39":"1","40":"","41":"0","42":"1","43":"0","44":"","45":"0/10ths cloud. 16 deg C.  Birding the Border Track Walk.","46":"Excellent looks at two of these birds.","47":"NA","_rn_":"3"},{"1":"URN:CornellLabOfOrnithology:EBIRD:OBS228708911","2":"2020-02-28 23:09:36","3":"17297","4":"species","5":"New Holland Honeyeater","6":"Phylidonyris novaehollandiae","7":"","8":"","9":"X","10":"","11":"","12":"","13":"Australia","14":"AU","15":"Victoria","16":"AU-VIC","17":"Surf Coast","18":"AU-VIC-SUR","19":"NA","20":"NA","21":"NA","22":"NA","23":"Point Addis","24":"L921929","25":"H","26":"-38.39479","27":"144.2525","28":"1994-09-16","29":"","30":"obsr450476","31":"S16685922","32":"Incidental","33":"P20","34":"EBIRD_AU","35":"NA","36":"NA","37":"NA","38":"NA","39":"1","40":"","41":"0","42":"1","43":"0","44":"","45":"Report by Laurie Living, The Basin, Vic., in The Bird Observer dated December, 1994. Eremaea Birds List 33640","46":"","47":"NA","_rn_":"4"},{"1":"URN:CornellLabOfOrnithology:EBIRD:OBS375770901","2":"2017-10-24 13:43:06","3":"11548","4":"species","5":"Galah","6":"Eolophus roseicapilla","7":"","8":"","9":"X","10":"","11":"","12":"","13":"Australia","14":"AU","15":"Western Australia","16":"AU-WA","17":"Jerramungup","18":"AU-WA-JER","19":"NA","20":"NA","21":"NA","22":"NA","23":"South Coast Highway (-33.83148, 119.25389)","24":"L4294248","25":"P","26":"-33.83136","27":"119.2539","28":"1999-09-09","29":"","30":"obsr357881","31":"S26568040","32":"Incidental","33":"P20","34":"EBIRD","35":"NA","36":"NA","37":"NA","38":"NA","39":"0","40":"","41":"0","42":"1","43":"0","44":"","45":"","46":"","47":"NA","_rn_":"5"},{"1":"URN:CornellLabOfOrnithology:EBIRD:OBS679922534","2":"2020-03-22 19:14:26","3":"18890","4":"species","5":"Gray Butcherbird","6":"Cracticus torquatus","7":"","8":"","9":"1","10":"","11":"","12":"","13":"Australia","14":"AU","15":"New South Wales","16":"AU-NSW","17":"Coonamble","18":"AU-NSW-COO","19":"NA","20":"NA","21":"NA","22":"NA","23":"Warrumbungle National Park","24":"L921606","25":"H","26":"-31.27741","27":"148.9986","28":"1998-09-30","29":"","30":"obsr345724","31":"S50159009","32":"Historical","33":"P62","34":"EBIRD","35":"NA","36":"NA","37":"NA","38":"20","39":"1","40":"G4704278","41":"0","42":"1","43":"0","44":"","45":"Gould League Bird Study Camp","46":"","47":"NA","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10],"total":[47]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuTkFcbmBgYCJ9 -->
+<pre class="r"><code>NA</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1800,6 +1857,10 @@ head(baa)
   select(SAMPLING.EVENT.IDENTIFIER, LOCALITY.ID, LATITUDE, LONGITUDE, OBSERVATION.DATE) %&gt;% 
   distinct()</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gc2VsZWN0KC4sIFNBTVBMSU5HLkVWRU5ULklERU5USUZJRVIsIExPQ0FMSVRZLklELCBMQVRJVFVERSwgTE9OR0lUVURFLCAgOiBcbiAgdW51c2VkIGFyZ3VtZW50cyAoU0FNUExJTkcuRVZFTlQuSURFTlRJRklFUiwgTE9DQUxJVFkuSUQsIExBVElUVURFLCBMT05HSVRVREUsIE9CU0VSVkFUSU9OLkRBVEUpXG4ifQ== -->
+<pre><code>Error in select(., SAMPLING.EVENT.IDENTIFIER, LOCALITY.ID, LATITUDE, LONGITUDE,  : 
+  unused arguments (SAMPLING.EVENT.IDENTIFIER, LOCALITY.ID, LATITUDE, LONGITUDE, OBSERVATION.DATE)</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1810,9 +1871,19 @@ head(baa)
 <h2>Read in fire shapefile</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmlyZXNoYXBlPC0gc3RfcmVhZChcIk5hdGlvbmFsX0luZGljYXRpdmVfQWdncmVnYXRlZF9GaXJlX0V4dGVudF9EYXRhc2V0X3YyMDIwMDIxMS9OYXRpb25hbF9JbmRpY2F0aXZlX0FnZ3JlZ2F0ZWRfRmlyZV9FeHRlbnRfRGF0YXNldF92MjAyMDAyMTEuc2hwXCIpXG5gYGAifQ== -->
-<pre class="r"><code>fireshape&lt;- st_read(&quot;National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211/National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211.shp&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmlyZXNoYXBlPC0gc3RfcmVhZChcIk5hdGlvbmFsX0luZGljYXRpdmVfQWdncmVnYXRlZF9GaXJlX0V4dGVudF9EYXRhc2V0X3YyMDIwMDIxMS9OYXRpb25hbF9JbmRpY2F0aXZlX0FnZ3JlZ2F0ZWRfRmlyZV9FeHRlbnRfRGF0YXNldF92MjAyMDAyMTEuc2hwXCIpXG5cbmBgYCJ9 -->
+<pre class="r"><code>fireshape&lt;- st_read(&quot;National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211/National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211.shp&quot;)
+</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUmVhZGluZyBsYXllciBgTmF0aW9uYWxfSW5kaWNhdGl2ZV9BZ2dyZWdhdGVkX0ZpcmVfRXh0ZW50X0RhdGFzZXRfdjIwMjAwMjExJyBmcm9tIGRhdGEgc291cmNlIGBDOlxcVXNlcnNcXGV1cGhvXFxEZXNrdG9wXFxCSUdkYXRhXFxQcm9qZWN0XFxlQmlyZC1GaXJlLUluZGV4XFxOYXRpb25hbF9JbmRpY2F0aXZlX0FnZ3JlZ2F0ZWRfRmlyZV9FeHRlbnRfRGF0YXNldF92MjAyMDAyMTFcXE5hdGlvbmFsX0luZGljYXRpdmVfQWdncmVnYXRlZF9GaXJlX0V4dGVudF9EYXRhc2V0X3YyMDIwMDIxMS5zaHAnIHVzaW5nIGRyaXZlciBgRVNSSSBTaGFwZWZpbGUnXG5TaW1wbGUgZmVhdHVyZSBjb2xsZWN0aW9uIHdpdGggMSBmZWF0dXJlIGFuZCAxIGZpZWxkXG5nZW9tZXRyeSB0eXBlOiAgTVVMVElQT0xZR09OXG5kaW1lbnNpb246ICAgICAgWFlaXG5iYm94OiAgICAgICAgICAgeG1pbjogMTE0LjE5NzUgeW1pbjogLTQzLjQ1NDA1IHhtYXg6IDE1My41NjMxIHltYXg6IC0xMC41OFxuel9yYW5nZTogICAgICAgIHptaW46IDAgem1heDogMFxuZ2VvZ3JhcGhpYyBDUlM6IEdEQTk0XG4ifQ== -->
+<pre><code>Reading layer `National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211&#39; from data source `C:\Users\eupho\Desktop\BIGdata\Project\eBird-Fire-Index\National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211\National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211.shp&#39; using driver `ESRI Shapefile&#39;
+Simple feature collection with 1 feature and 1 field
+geometry type:  MULTIPOLYGON
+dimension:      XYZ
+bbox:           xmin: 114.1975 ymin: -43.45405 xmax: 153.5631 ymax: -10.58
+z_range:        zmin: 0 zmax: 0
+geographic CRS: GDA94</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1831,6 +1902,10 @@ head(baa)
 <p>Make the eBird data a sf object, then match CRS(Coordinate Reference System) with fire shapefile</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZWJpcmRfcG9pbnRzIDwtIHN0X2FzX3NmKGJhYXRyaW1tZWQsIGNvb3Jkcz1jKFwiTE9OR0lUVURFXCIsIFwiTEFUSVRVREVcIiksIGNycz1zdF9jcnMoZmlyZXNoYXBlKSlcblxuYGBgIn0= -->
+<pre class="r"><code>ebird_points &lt;- st_as_sf(baatrimmed, coords=c(&quot;LONGITUDE&quot;, &quot;LATITUDE&quot;), crs=st_crs(fireshape))
+</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1867,6 +1942,7 @@ geographic CRS: GDA94
 </div>
 <div id="make-a-map-with-points-coloured-by-insideoutside" class="section level2">
 <h2>make a map with points coloured by inside/outside</h2>
+<p>Blue=Fire extent, Red=Checklists outisde, Black=Checklists Inside</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-plot-begin eyJjb25kaXRpb25zIjpbXSwiaGVpZ2h0Ijo0MzIuNjMyOSwic2l6ZV9iZWhhdmlvciI6MCwid2lkdGgiOjcwMH0= -->
@@ -1876,24 +1952,23 @@ geographic CRS: GDA94
 <!-- rnb-text-begin -->
 </div>
 </div>
-<div id="write-out-as-rds-to-a-directory-called-proceessed_data" class="section level1">
-<h1>write out as rds to a directory called proceessed_data</h1>
+<div id="write-out-as-rds-to-a-directory-called-processed_data" class="section level1">
+<h1>write out as rds to a directory called processed_data</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuP3NhdmVSRFMoKVxuXG5gYGAifQ== -->
-<pre class="r"><code>?saveRDS()
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGlyLmNyZWF0ZShcInByb2Nlc3NlZF9kYXRhXCIpXG5cbmBgYCJ9 -->
+<pre class="r"><code>dir.create(&quot;processed_data&quot;)
 </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZyBtZXNzYWdlczpcbjE6IEluIHJlYWRDaGFyKGZpbGUsIHNpemUsIFRSVUUpIDogdHJ1bmNhdGluZyBzdHJpbmcgd2l0aCBlbWJlZGRlZCBudWxzXG4yOiBJbiByZWFkQ2hhcihmaWxlLCBzaXplLCBUUlVFKSA6IHRydW5jYXRpbmcgc3RyaW5nIHdpdGggZW1iZWRkZWQgbnVsc1xuMzogSW4gcmVhZENoYXIoZmlsZSwgc2l6ZSwgVFJVRSkgOiB0cnVuY2F0aW5nIHN0cmluZyB3aXRoIGVtYmVkZGVkIG51bHNcbiJ9 -->
+<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZyBtZXNzYWdlczpcbjE6IEluIHJlYWRDaGFyKGZpbGUsIHNpemUsIFRSVUUpIDogdHJ1bmNhdGluZyBzdHJpbmcgd2l0aCBlbWJlZGRlZCBudWxzXG4yOiBJbiByZWFkQ2hhcihmaWxlLCBzaXplLCBUUlVFKSA6IHRydW5jYXRpbmcgc3RyaW5nIHdpdGggZW1iZWRkZWQgbnVsc1xuIn0= -->
 <pre><code>Warning messages:
 1: In readChar(file, size, TRUE) : truncating string with embedded nuls
-2: In readChar(file, size, TRUE) : truncating string with embedded nuls
-3: In readChar(file, size, TRUE) : truncating string with embedded nuls</code></pre>
+2: In readChar(file, size, TRUE) : truncating string with embedded nuls</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogImVCaXJkIGFuZCBGaXJlIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KYGBge3J9DQpsaWJyYXJ5KGRwbHlyKQ0KbGlicmFyeShnZ3Bsb3QyKQ0KbGlicmFyeShzZikNCmxpYnJhcnkodGlkeXZlcnNlKQ0KbGlicmFyeShhbmNob3JzKQ0KaW5zdGFsbC5wYWNrYWdlcygiYW5jaG9ycyIpDQppbnN0YWxsLnBhY2thZ2VzKCJSQ29sb3JCcmV3ZXIiKQ0KbGlicmFyeShSQ29sb3JCcmV3ZXIpDQpgYGANCg0KIyBTcGxpdCBmaWxlcyB1c2luZyBsaW51eCBjb21tYW5kIGxpbmUgYW5kIHJlYWQgaW4gZmlyc3QgZmlsZSBvZiAxMDAsMDAwIGxpbmVzIChiYWEpDQpgYGB7cn0NCnN5c3RlbSgibGVzcyAtbjEgUmF3RGF0YS9lYmRfQVVfcmVsQXByLTIwMjAudHh0IDI+JjEiLCBpbnRlcm4gPSBGQUxTRSwgc2hvdy5vdXRwdXQub24uY29uc29sZSA9IFRSVUUpDQpiYWE8LSByZWFkLmRlbGltKCJSYXdEYXRhL2JhYS5jc3YiLCBoZWFkZXIgPSBUUlVFLCBzZXA9Ilx0IikNCmhlYWQoYmFhKQ0KDQpgYGANCiMgRmlsdGVyaW5nIHVud2FudGVkIGNoZWNrbGlzdHMNCiMjIFByb3RvY29sIHVzZWQgZm9yIGZpbHRlcmluZzogIA0KUmVtb3ZlZCBJbmNvbXBsZXRlIGNoZWNrbGlzdHMNClJlbW92ZWQgY2hlY2tsaXN0cyBEdXJhdGlvbi5NaW51dGVzIGxlc3MgdGhhbiAxMG0gYW5kIG1vcmUgdGhhbiA1aHJzDQpSZW1vdmVkIENoZWNrbGlzdHMgRWZmb3J0LkRpc3RhbmNlIG1vcmUgdGhhbiAxMGttICANCiMgU2VsZWN0aW5nIHdhbnRlZCBjb2x1bW5zDQpLZWVwaW5nIExvY2FsaXR5IElELCBTYW1wbGluZyBldmVudCBpZGVudGlmaWVyLCBMYXQgYW5kIExvbmcsIERhdGUNCiMgU2VsZWN0aW5nIGRpc3RpbmN0IHJvd3MNClJlbW92aW5nIGR1cGxpY2F0ZXMgDQoNCg0KYGBge3J9DQpiYWF0cmltbWVkPC0gYmFhICU+JSANCiAgZmlsdGVyKEFMTC5TUEVDSUVTLlJFUE9SVEVEPT0xLCBFRkZPUlQuRElTVEFOQ0UuS008MTAsIERVUkFUSU9OLk1JTlVURVM8MzAwLCBEVVJBVElPTi5NSU5VVEVTPjEwKSAlPiUgDQogIHNlbGVjdChTQU1QTElORy5FVkVOVC5JREVOVElGSUVSLCBMT0NBTElUWS5JRCwgTEFUSVRVREUsIExPTkdJVFVERSwgT0JTRVJWQVRJT04uREFURSkgJT4lIA0KICBkaXN0aW5jdCgpDQpgYGANCg0KIyBTcGFjaWFsIFByb2Nlc3Npbmcgc3RlcHM6DQoNCiMjIFJlYWQgaW4gZmlyZSBzaGFwZWZpbGUNCmBgYHtyfQ0KZmlyZXNoYXBlPC0gc3RfcmVhZCgiTmF0aW9uYWxfSW5kaWNhdGl2ZV9BZ2dyZWdhdGVkX0ZpcmVfRXh0ZW50X0RhdGFzZXRfdjIwMjAwMjExL05hdGlvbmFsX0luZGljYXRpdmVfQWdncmVnYXRlZF9GaXJlX0V4dGVudF9EYXRhc2V0X3YyMDIwMDIxMS5zaHAiKQ0KYGBgDQoNCg0KIyMgTWFwIG9mIHNoYXBlZmlsZQ0KYGBge3J9DQpnZ3Bsb3QoKSArIA0KICBnZW9tX3NmKGRhdGEgPSBmaXJlc2hhcGUsIHNpemUgPSAwLjEsIGNvbG9yID0gImJsYWNrIiwgZmlsbCA9ICJibGFjayIpICsgDQogIGdndGl0bGUoIkZpcmUgQm91bmRhcnkgUGxvdCIpICsgDQogIGNvb3JkX3NmKCkNCmBgYA0KIyMgQ29udmVydCBlYmlyZCBjaGVja2xpc3RzIHRvIHNmIG9iamVjdCB3aXRoIENSUyBjb2RlIGZyb20gZmlyZSBzaGFwZWZpbGUNCk1ha2UgdGhlIGVCaXJkIGRhdGEgYSBzZiBvYmplY3QsIHRoZW4gbWF0Y2ggQ1JTKENvb3JkaW5hdGUgUmVmZXJlbmNlIFN5c3RlbSkgd2l0aCBmaXJlIHNoYXBlZmlsZQ0KYGBge3J9DQplYmlyZF9wb2ludHMgPC0gc3RfYXNfc2YoYmFhdHJpbW1lZCwgY29vcmRzPWMoIkxPTkdJVFVERSIsICJMQVRJVFVERSIpLCBjcnM9c3RfY3JzKGZpcmVzaGFwZSkpDQoNCmBgYA0KIyMgTWFrZSBhIG1hcCBvZiB0aGUgcG9pbnRzIHVzaW5nIGdncGxvdCBhbmQgZ2VvbV9zZiBvbiB0aGUgZmlyZSBzaGFwZWZpbGUgbWFwDQpgYGB7cn0NCmdncGxvdCgpICsgDQogIGdlb21fc2YoZGF0YSA9IGZpcmVzaGFwZSwgc2l6ZSA9IDAuMSwgY29sb3IgPSAiYmxhY2siLCBmaWxsID0gImJsYWNrIikgKyANCiAgZ2VvbV9zZihkYXRhPWViaXJkX3BvaW50cywgc2l6ZT0wLjUsIGNvbG9yPSJncmVlbiIpKw0KICBnZ3RpdGxlKCJGaXJlIEJvdW5kYXJ5IHdpdGggbGlzdHBvaW50cyIpICsgDQogIGNvb3JkX3NmKCkNCmBgYA0KIyMgYWRkIGNvbHVtbiBmb3IgaW5zaWRlL291dHNpZGUgdXNpbmcgc3Rfam9pbg0KYGBge3J9DQpwb2ludHNpbm91dDwtc3Rfam9pbihlYmlyZF9wb2ludHMsIGZpcmVzaGFwZSwgam9pbiA9IHN0X3dpdGhpbikNClZpZXcocG9pbnRzaW5vdXQpDQpjb3VudChwb2ludHNpbm91dCwgSWQpDQpsaXN0KHBvaW50c2lub3V0JElkKQ0KDQojIyMjIFBsb3R0aW5nIGRpZG50IGxpa2UgdGhlIE5BcyBvciAwcyBzbyBoYWQgdG8gY29udmVydCB0byAxcyhJbnNpZGUgYnVybnQgem9uZSkgYW5kIDJzKE91dHNpZGUgYnVybnQgem9uZSkNCg0KaW5vdXQ8LSByZXBsYWNlLnZhbHVlKHBvaW50c2lub3V0LCAiSWQiLCBmcm9tID0gMCwgdG8gPSAxKQ0KaW5vdXRbaXMubmEoaW5vdXQpXSA9IDANCmlub3V0MTwtIHJlcGxhY2UudmFsdWUoaW5vdXQsICJJZCIsIGZyb20gPSAwLCB0byA9IDIpDQpjb3VudChpbm91dCwgSWQpDQpgYGANCg0KDQojIyBtYWtlIGEgbWFwIHdpdGggcG9pbnRzIGNvbG91cmVkIGJ5IGluc2lkZS9vdXRzaWRlDQpgYGB7cn0NCmdncGxvdCgpICsgDQogIGdlb21fc2YoZGF0YSA9IGZpcmVzaGFwZSwgc2l6ZSA9IDAuMSwgY29sb3IgPSAiYmx1ZSIsIGZpbGwgPSAiYmx1ZSIpICsgDQogIGdlb21fc2YoZGF0YT1pbm91dDEsIHNpemU9MC41LCBjb2xvdXIgPSBpbm91dDEkSWQpKw0KICBnZ3RpdGxlKCJQb2ludHMgYnkgSW4tT3V0IikgKyANCiAgY29vcmRfc2YoKQ0KYGBgDQoNCiMgd3JpdGUgb3V0IGFzIHJkcyB0byBhIGRpcmVjdG9yeSBjYWxsZWQgcHJvY2Vlc3NlZF9kYXRhDQpgYGB7cn0NCj9zYXZlUkRTKCkNCmBgYA==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogImVCaXJkIGFuZCBGaXJlIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KYGBge3J9DQpsaWJyYXJ5KGRwbHlyKQ0KbGlicmFyeShnZ3Bsb3QyKQ0KbGlicmFyeShzZikNCmxpYnJhcnkodGlkeXZlcnNlKQ0KbGlicmFyeShhbmNob3JzKQ0KYGBgDQoNCiMgU3BsaXQgZmlsZXMgdXNpbmcgbGludXggY29tbWFuZCBsaW5lIGFuZCByZWFkIGluIGZpcnN0IGZpbGUgb2YgMTAwLDAwMCBsaW5lcyAoYmFhKQ0KYGBge3J9DQpzeXN0ZW0oImxlc3MgLW4xIFJhd0RhdGEvZWJkX0FVX3JlbEFwci0yMDIwLnR4dCAyPiYxIiwgaW50ZXJuID0gRkFMU0UsIHNob3cub3V0cHV0Lm9uLmNvbnNvbGUgPSBUUlVFKQ0KYmFhPC0gcmVhZC5kZWxpbSgiUmF3RGF0YS9iYWEuY3N2IiwgaGVhZGVyID0gVFJVRSwgc2VwPSJcdCIpDQpoZWFkKGJhYSkNCg0KYGBgDQojIEZpbHRlcmluZyB1bndhbnRlZCBjaGVja2xpc3RzDQojIyBQcm90b2NvbCB1c2VkIGZvciBmaWx0ZXJpbmc6ICANClJlbW92ZWQgSW5jb21wbGV0ZSBjaGVja2xpc3RzDQpSZW1vdmVkIGNoZWNrbGlzdHMgRHVyYXRpb24uTWludXRlcyBsZXNzIHRoYW4gMTBtIGFuZCBtb3JlIHRoYW4gNWhycw0KUmVtb3ZlZCBDaGVja2xpc3RzIEVmZm9ydC5EaXN0YW5jZSBtb3JlIHRoYW4gMTBrbSAgDQojIFNlbGVjdGluZyB3YW50ZWQgY29sdW1ucw0KS2VlcGluZyBMb2NhbGl0eSBJRCwgU2FtcGxpbmcgZXZlbnQgaWRlbnRpZmllciwgTGF0IGFuZCBMb25nLCBEYXRlDQojIFNlbGVjdGluZyBkaXN0aW5jdCByb3dzDQpSZW1vdmluZyBkdXBsaWNhdGVzIA0KDQoNCmBgYHtyfQ0KYmFhdHJpbW1lZDwtIGJhYSAlPiUgDQogIGZpbHRlcihBTEwuU1BFQ0lFUy5SRVBPUlRFRD09MSwgRUZGT1JULkRJU1RBTkNFLktNPDEwLCBEVVJBVElPTi5NSU5VVEVTPDMwMCwgRFVSQVRJT04uTUlOVVRFUz4xMCkgJT4lIA0KICBzZWxlY3QoU0FNUExJTkcuRVZFTlQuSURFTlRJRklFUiwgTE9DQUxJVFkuSUQsIExBVElUVURFLCBMT05HSVRVREUsIE9CU0VSVkFUSU9OLkRBVEUpICU+JSANCiAgZGlzdGluY3QoKQ0KYGBgDQoNCiMgU3BhY2lhbCBQcm9jZXNzaW5nIHN0ZXBzOg0KDQojIyBSZWFkIGluIGZpcmUgc2hhcGVmaWxlDQpgYGB7cn0NCmZpcmVzaGFwZTwtIHN0X3JlYWQoIk5hdGlvbmFsX0luZGljYXRpdmVfQWdncmVnYXRlZF9GaXJlX0V4dGVudF9EYXRhc2V0X3YyMDIwMDIxMS9OYXRpb25hbF9JbmRpY2F0aXZlX0FnZ3JlZ2F0ZWRfRmlyZV9FeHRlbnRfRGF0YXNldF92MjAyMDAyMTEuc2hwIikNCmBgYA0KDQoNCiMjIE1hcCBvZiBzaGFwZWZpbGUNCmBgYHtyfQ0KZ2dwbG90KCkgKyANCiAgZ2VvbV9zZihkYXRhID0gZmlyZXNoYXBlLCBzaXplID0gMC4xLCBjb2xvciA9ICJibGFjayIsIGZpbGwgPSAiYmxhY2siKSArIA0KICBnZ3RpdGxlKCJGaXJlIEJvdW5kYXJ5IFBsb3QiKSArIA0KICBjb29yZF9zZigpDQpgYGANCiMjIENvbnZlcnQgZWJpcmQgY2hlY2tsaXN0cyB0byBzZiBvYmplY3Qgd2l0aCBDUlMgY29kZSBmcm9tIGZpcmUgc2hhcGVmaWxlDQpNYWtlIHRoZSBlQmlyZCBkYXRhIGEgc2Ygb2JqZWN0LCB0aGVuIG1hdGNoIENSUyhDb29yZGluYXRlIFJlZmVyZW5jZSBTeXN0ZW0pIHdpdGggZmlyZSBzaGFwZWZpbGUNCmBgYHtyfQ0KZWJpcmRfcG9pbnRzIDwtIHN0X2FzX3NmKGJhYXRyaW1tZWQsIGNvb3Jkcz1jKCJMT05HSVRVREUiLCAiTEFUSVRVREUiKSwgY3JzPXN0X2NycyhmaXJlc2hhcGUpKQ0KDQpgYGANCiMjIE1ha2UgYSBtYXAgb2YgdGhlIHBvaW50cyB1c2luZyBnZ3Bsb3QgYW5kIGdlb21fc2Ygb24gdGhlIGZpcmUgc2hhcGVmaWxlIG1hcA0KYGBge3J9DQpnZ3Bsb3QoKSArIA0KICBnZW9tX3NmKGRhdGEgPSBmaXJlc2hhcGUsIHNpemUgPSAwLjEsIGNvbG9yID0gImJsYWNrIiwgZmlsbCA9ICJibGFjayIpICsgDQogIGdlb21fc2YoZGF0YT1lYmlyZF9wb2ludHMsIHNpemU9MC41LCBjb2xvcj0iZ3JlZW4iKSsNCiAgZ2d0aXRsZSgiRmlyZSBCb3VuZGFyeSB3aXRoIGxpc3Rwb2ludHMiKSArIA0KICBjb29yZF9zZigpDQpgYGANCiMjIGFkZCBjb2x1bW4gZm9yIGluc2lkZS9vdXRzaWRlIHVzaW5nIHN0X2pvaW4NCmBgYHtyfQ0KcG9pbnRzaW5vdXQ8LXN0X2pvaW4oZWJpcmRfcG9pbnRzLCBmaXJlc2hhcGUsIGpvaW4gPSBzdF93aXRoaW4pDQpWaWV3KHBvaW50c2lub3V0KQ0KY291bnQocG9pbnRzaW5vdXQsIElkKQ0KbGlzdChwb2ludHNpbm91dCRJZCkNCg0KIyMjIyBQbG90dGluZyBkaWRudCBsaWtlIHRoZSBOQXMgb3IgMHMgc28gaGFkIHRvIGNvbnZlcnQgdG8gMXMoSW5zaWRlIGJ1cm50IHpvbmUpIGFuZCAycyhPdXRzaWRlIGJ1cm50IHpvbmUpDQoNCmlub3V0PC0gcmVwbGFjZS52YWx1ZShwb2ludHNpbm91dCwgIklkIiwgZnJvbSA9IDAsIHRvID0gMSkNCmlub3V0W2lzLm5hKGlub3V0KV0gPSAwDQppbm91dDE8LSByZXBsYWNlLnZhbHVlKGlub3V0LCAiSWQiLCBmcm9tID0gMCwgdG8gPSAyKQ0KY291bnQoaW5vdXQsIElkKQ0KYGBgDQoNCg0KIyMgbWFrZSBhIG1hcCB3aXRoIHBvaW50cyBjb2xvdXJlZCBieSBpbnNpZGUvb3V0c2lkZQ0KQmx1ZT1GaXJlIGV4dGVudCwgUmVkPUNoZWNrbGlzdHMgb3V0aXNkZSwgQmxhY2s9Q2hlY2tsaXN0cyBJbnNpZGUNCmBgYHtyfQ0KTWFwYnlJbk91dDwtIGdncGxvdCgpICsgDQogIGdlb21fc2YoZGF0YSA9IGZpcmVzaGFwZSwgc2l6ZSA9IDAuMSwgY29sb3IgPSAiYmx1ZSIsIGZpbGwgPSAiYmx1ZSIpICsgDQogIGdlb21fc2YoZGF0YT1pbm91dDEsIHNpemU9MC41LCBjb2xvdXIgPSBpbm91dDEkSWQpKw0KICBnZ3RpdGxlKCJQb2ludHMgYnkgSW4tT3V0IikgKyANCiAgY29vcmRfc2YoKQ0KcHJpbnQoTWFwYnlJbk91dCkNCmBgYA0KDQojIHdyaXRlIG91dCBhcyByZHMgdG8gYSBkaXJlY3RvcnkgY2FsbGVkIHByb2Nlc3NlZF9kYXRhDQpgYGB7cn0NCmRpci5jcmVhdGUoInByb2Nlc3NlZF9kYXRhIikNCnNhdmVSRFMoTWFwYnlJbk91dCwgInByb2Nlc3NlZF9kYXRhL01hcGJ5SW5PdXQucmRzIikNCmBgYA==</div>
 
 
 

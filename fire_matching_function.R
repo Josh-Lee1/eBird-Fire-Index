@@ -7,16 +7,16 @@ read_and_process_raw_ebird <- function(filename,fireshape=fireshape){
   baa<- read.delim(paste0("RawData/",filename), header = TRUE, sep="\t")
   baatrimmed<- baa %>% 
     filter(ALL.SPECIES.REPORTED==1, EFFORT.DISTANCE.KM<10, DURATION.MINUTES<300, DURATION.MINUTES>10) %>% 
-    select(SAMPLING.EVENT.IDENTIFIER, LOCALITY.ID, LATITUDE, LONGITUDE, OBSERVATION.DATE) %>% 
+    dplyr::select(SAMPLING.EVENT.IDENTIFIER, LOCALITY.ID, LATITUDE, LONGITUDE, OBSERVATION.DATE) %>% 
     distinct()
   
   ebird_points <- st_as_sf(baatrimmed, coords=c("LONGITUDE", "LATITUDE"), crs=st_crs(fireshape))
   pointsinout<-st_join(ebird_points, fireshape, join = st_within)
-  saveRDS(pointsinout,file = paste0("filteredData/",filename,".rds"))
+  saveRDS(pointsinout,file = paste0("filteredData/",filename, ".rds"))
 }
 
 
-
+list.files
 
 
 fireshape_current<- st_read("National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211/National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211.shp")

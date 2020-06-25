@@ -9,9 +9,6 @@ library(ggplot2)
 library(sf)
 library(tidyverse)
 library(anchors)
-install.packages("anchors")
-install.packages("RColorBrewer")
-library(RColorBrewer)
 ```
 
 # Split files using linux command line and read in first file of 100,000 lines (baa)
