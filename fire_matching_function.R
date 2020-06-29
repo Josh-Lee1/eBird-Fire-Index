@@ -55,3 +55,5 @@ all_files<-list.files("Rawdatatest",full.names = TRUE)
 for(i in 1:length(all_files)){
   read_and_process_raw_ebird(filename=all_files[i],fireshape=fireshape_current)
 }
+
+

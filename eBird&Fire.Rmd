@@ -97,3 +97,27 @@ print(MapbyInOut)
 dir.create("processed_data")
 saveRDS(MapbyInOut, "processed_data/MapbyInOut.rds")
 ```
+
+
+#trying to test the loop outputs
+```{r}
+
+baain<- filter(baa, baa$in_fire == "True")
+baapoints <- st_as_sf(baa, coords=c("LONGITUDE", "LATITUDE"), crs=st_crs(fireshape))
+
+
+MapbyInOut2<- ggplot() + 
+  geom_sf(data = fireshape, size = 0.1, color = "blue", fill = "blue") + 
+  geom_sf(data=baapoints, size=0.5, colour= baapoints$in_fire)+
+  ggtitle("Points by In-Out") + 
+  coord_sf()
+print(MapbyInOut2)
+
+MapbyInOut2<- ggplot() + 
+  geom_sf(data = fireshape, size = 0.1, color = "blue", fill = "blue") + 
+  geom_sf(data=baainpoints, size=1, colour = 'Red')+
+  ggtitle("baa Points in") + 
+  coord_sf()
+print(MapbyInOut2)
+```
+
