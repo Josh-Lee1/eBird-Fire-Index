@@ -7,7 +7,7 @@ library(sf)
 fireshape_current<- st_read("National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211/National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211.shp")
 
 
-baa <- read_delim("Rawdatatest/baa", "\t", 
+baa <- read_delim("RawData/baa", "\t", 
                   escape_double = FALSE, trim_ws = TRUE)
 colnames(baa)<-gsub(" ",".",colnames(baa))
 
@@ -45,11 +45,11 @@ read_and_process_raw_ebird <- function(filename,fireshape=fireshape){
   pointsinout <- baatrimmed %>%
     left_join(., pointsin)
   
-  saveRDS(pointsinout,file = paste0("filteredData/", gsub("Rawdatatest/", "",filename), ".rds"))
+  saveRDS(pointsinout,file = paste0("filteredData/", gsub("RawData/", "",filename), ".rds"))
 }
 
 
-all_files<-list.files("Rawdatatest",full.names = TRUE)
+all_files<-list.files("RawData",full.names = TRUE)
 
 
 for(i in 1:length(all_files)){
