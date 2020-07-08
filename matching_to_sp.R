@@ -34,7 +34,7 @@ extract_species_data <- function(filename, list_infire){
                     escape_double = FALSE, trim_ws = TRUE,
                     col_names = FALSE)
   
-  baa <- if (baa[1,1]=="GLOBAL UNIQUE IDENTIFIER") {
+  baa <- if (baa[1,1]=="GLOBAL.UNIQUE.IDENTIFIER") {
     baa %>% 
       slice(2:100000)
   } else {
@@ -47,7 +47,7 @@ extract_species_data <- function(filename, list_infire){
   baa_inside<- semi_join(baa, list_infire, by = "SAMPLING.EVENT.IDENTIFIER")
   
   
-  saveRDS(pointsinout,file = paste0("rawspeciesdata/", gsub("RawData/", "",filename), ".rds"))
+  saveRDS(baa_inside,file = paste0("rawspeciesdata/", gsub("RawData/", "",filename), ".rds"))
 }
 
 
