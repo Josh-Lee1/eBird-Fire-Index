@@ -57,3 +57,14 @@ all_files<-list.files("RawData",full.names = TRUE)
 for(i in 1:length(all_files)){
   extract_species_data(filename=all_files[i], list_infire)
 }
+
+## smooshing these files together
+all_files<-list.files("rawspeciesdata",full.names = TRUE)
+second_list<- list()
+
+for (i in 1:length(all_files)){
+  print(i)
+  temp<-readRDS(all_files[i])
+   second_list<-bind_rows(second_list,temp)
+}
+

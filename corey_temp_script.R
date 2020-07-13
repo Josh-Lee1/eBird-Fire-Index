@@ -35,9 +35,11 @@ sl_lists <- sl %>%
 
 lists_without <- data_df %>%
   dplyr::filter(! SAMPLING.EVENT.IDENTIFIER %in% sl_lists$SAMPLING.EVENT.IDENTIFIER) %>%
-  dplyr::select(SAMPLING.EVENT.IDENTIFIER) %>% 
+  dplyr::select(SAMPLING.EVENT.IDENTIFIER, EFFORT.DISTANCE.KM, DURATION.MINUTES, OBSERVATION.DATE) %>% 
   distinct() %>%
   mutate(present=0)
 
 final_sl_dat <- sl %>%
   bind_rows(lists_without)
+
+#### check if we have lost checklists and dates...
