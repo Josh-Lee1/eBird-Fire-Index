@@ -1,6 +1,19 @@
 library(tidyverse)
-
+library(tidyverse)
+library(lubridate)
 setwd("rawspeciesdata/")
+
+
+read_dat_function <- function(file_name) {
+  
+  dat <- readRDS(file_name)
+  dat$OBSERVATION.DATE<-ymd(dat$OBSERVATION.DATE)
+  return(dat)
+}
+
+files <- list.files("../rawspeciesdata/")
+data <- lapply(files, read_dat_function)
+
 
 
 read_dat_function <- function(file_name) {
@@ -41,5 +54,7 @@ lists_without <- data_df %>%
 
 final_sl_dat <- sl %>%
   bind_rows(lists_without)
+
+
 
 #### check if we have lost checklists and dates...

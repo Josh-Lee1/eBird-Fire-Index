@@ -16,7 +16,7 @@ library(anchors)
 system("less -n1 RawData/ebd_AU_relApr-2020.txt 2>&1", intern = FALSE, show.output.on.console = TRUE)
 baa<- read.delim("RawData/baa", header = TRUE, sep="\t")
 head(baa)
-
+view(baa)
 ```
 # Filtering unwanted checklists
 ## Protocol used for filtering:  
