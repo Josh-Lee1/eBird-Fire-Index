@@ -70,5 +70,6 @@ setNames(as.list(a$COMMON.NAME),a$COMMON.NAME) %>% #need this weird trick to kee
 
 out %>%
   spread(key="before.after",value="percent_observed") %>%
-  mutate(percentage_drop=(`FALSE`-`TRUE`)) %>%
-  arrange(desc(percentage_drop))
+  mutate(percentage_drop=(`After`-`Before`)) %>%
+  arrange(percentage_drop)
+
