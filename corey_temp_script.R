@@ -1,15 +1,12 @@
+
 library(tidyverse)
-<<<<<<< HEAD
-library(tidyverse)
-=======
->>>>>>> 590cec9b91a9b7ed7fe864f6293877021512a453
 library(lubridate)
+library(mgcv)
 setwd("rawspeciesdata/")
 
 read_dat_function <- function(file_name) {
   dat <- readRDS(file_name)
   dat$OBSERVATION.DATE<-ymd(dat$OBSERVATION.DATE)
-<<<<<<< HEAD
   return(dat)
 }
 
@@ -21,9 +18,6 @@ data <- lapply(files, read_dat_function)
 read_dat_function <- function(file_name) {
   
   dat <- readRDS(file_name)
-  
-=======
->>>>>>> 590cec9b91a9b7ed7fe864f6293877021512a453
   return(dat)
 }
 
@@ -44,7 +38,7 @@ species_count <- data_df %>%
 
 process<-function(species_name,data_df=data_df){
   sl <- data_df %>%
-    dplyr::filter(COMMON.NAME == species_name) %>%
+    dplyr::filter(COMMON.NAME == "species_name") %>%
     mutate(present=1)
   
   sl_lists <- sl %>%
@@ -73,7 +67,6 @@ data_df %>%
   count(num.obs=n()) %>%
   filter(num.obs>500)->a
 
-<<<<<<< HEAD
 lists_without <- data_df %>%
   dplyr::filter(! SAMPLING.EVENT.IDENTIFIER %in% sl_lists$SAMPLING.EVENT.IDENTIFIER) %>%
   dplyr::select(SAMPLING.EVENT.IDENTIFIER, EFFORT.DISTANCE.KM, DURATION.MINUTES, OBSERVATION.DATE) %>% 
@@ -86,12 +79,16 @@ final_sl_dat <- sl %>%
 
 
 #### check if we have lost checklists and dates...
-=======
 setNames(as.list(a$COMMON.NAME),a$COMMON.NAME) %>% #need this weird trick to keep the species names
   map_df(process,data_df,.id="var") -> out
 
 out %>%
   spread(key="before.after",value="percent_observed") %>%
-  mutate(percentage_drop=(`FALSE`-`TRUE`)) %>%
-  arrange(desc(percentage_drop))
->>>>>>> 590cec9b91a9b7ed7fe864f6293877021512a453
+  mutate("percentage_drop"=(`FALSE`-`TRUE`)) %>%
+  arrange(desc("percentage_drop"))
+
+#### Making the Model
+
+
+#Goal
+mgcv::gam(presence ~ before_after + s(effort_distance_km) + s(effort_duration_minutes) + s(month, bs="cc"), family="binomial")
