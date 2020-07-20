@@ -1,4 +1,6 @@
 ### extract coefficients and se
+library(tidyverse)
+library(mgcv)
 
 setwd("model_objects/")
 
@@ -6,10 +8,11 @@ mod<- readRDS("Australian_Magpie.RDS")
 datsum<- summary(mod)
 coeff<- mod$coefficients
 se<- datsum$se
-wgoods<- data.frame(coeff, se)
-
+devi<- mod$deviance
+wgoods<- data.frame(coeff, se, devi)
+tibble(species=file_name, coeff=coeff[2], se=se[2])
   
-files <- list.files("../model_objects/")
+all_files <- list.files("../model_objects/")
 
   
 setwd("..")
@@ -17,14 +20,20 @@ setwd("..")
   extractingcoeffse_function <- function(file_name) {
     data <- readRDS(file_name)
     datsum<- summary(data)
-    coeff<- dat$coefficients
+    coeff<- data$coefficients
     se<- datsum$se
-    wgoods<- data.frame(coeff, se) 
+    deviance<- data$deviance
+    wgoods<- data.frame(coeff, se, deviance) 
     
     saveRDS(wgoods, file = paste0("models_extracted/", gsub("model_objects/", "",file_name), ".RDS"))
+    
+    return(tibble(species=file_name, coeff=coeff[2], se=se[2]))
   }
-
-  extractingcoeffse_function(file_name)
   
+  bird_response_df <- map_df(all_files, extractingcoeffse_function)
+  
+ 
   # want the function to: read file, extract bits, make df, save it in another folder. 
   # then loop for all 
+
+  
