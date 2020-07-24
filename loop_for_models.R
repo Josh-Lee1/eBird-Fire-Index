@@ -35,7 +35,7 @@ all_files <- list.files("model_objects/")
     return(wgoods)
   }
   
-  bird_response_df <- map_df(all_files[1:5], extractingcoeffse_function)
+  bird_response_df <- map_df(all_files, extractingcoeffse_function)
   
  
   # want the function to: read file, extract bits, make df, save it in another folder. 
