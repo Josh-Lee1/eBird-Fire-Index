@@ -9,19 +9,43 @@ foodtraits<- traits %>%
   select("X3_Taxon_common_name_2", "X99_Body_mass_average_8", "X163_Food_Fruit_10":"X173_Food_fish_or_invertebrates_Inland_waters_10", "X115_Feeding_habitat_Terrestrial_Arid_shrubland_9":"X145_Feeding_habitat_Urban_landscapes_9", "X193_National_movement_local_dispersal_13":"X197_National_movement_Irruptive_13") %>% 
   rename(species = "X3_Taxon_common_name_2") %>% 
   mutate(gsub(" ", "_", foodtraits$species)) %>% 
-  rename(species_name = `gsub(" ", "_", foodtraits$species)`) %>% 
-  filter(species_name %in% fire_coefs$species) %>% 
+  rename(species_name = `gsub(" ", "_", foodtraits$species)`)
+  
+
+#### needs fixing!!!
+
+traitseds<- recode(foodtraits$species_name, 'Black-faced_Cuckoo-shrike' = "Black-faced_Cuckooshrike",
+                  'European_Common_Blackbird' = "Eurasian_Blackbird",
+                  'European_Common_Starling' = "European_Starling",
+                  'Grey_Butcherbird' = "Gray_Butcherbird",
+                  'Grey_Fantail' = "Gray_Fantail",
+                  'Grey_Shrike-thrush' = "Gray_Shrikethrush",
+                  'Australian_Wood_Duck' = "Maned_Duck",
+                  'Red-browed_Finch' = "Red-browed_Firetail",
+                  'Scarlet_Honeyeater' = "Scarlet_Myzomela",
+                  'Superb_Fairy-wren' = "Superb_Fairywren",
+                  'Variegated_Fairy-wren' = "Variegated_Fairywren",
+                  'Willie_Wagtail' = "Willie-wagtail", 
+                  'Jacky_Winter' = "Jacky-winter")
+
+
+
+  recode(Jacky_Winter = Jacky-winter) %>% 
+  filter(foodtraits$species, species_name %in% fire_coefs$species) %>% 
   left_join(fire_coefs, foodtraits, by = "species_name")
 
 
 
 values<- foodtraits %>% 
-  filter(Term == "before.afterBefore") 
+  filter(Term == "before.afterBefore") %>% 
+  mutate(X99_Body_mass_average_8 = as.numeric(X99_Body_mass_average_8))
 
-  
-as.numeric(unlist(foodtraits$X99_Body_mass_average_8))
+check<- select(responses, species)
+check1 <- select(valuesfin, species)
+check2<- left_join(check1, check, by = "species")
 
-?as.numeric
+
+
 
 valuesfin<- values %>% 
   mutate(foodspec = X163_Food_Fruit_10 +                                                          
@@ -68,7 +92,6 @@ X144_Feeding_habitat_Agricultural_landscapes_9 +
 X145_Feeding_habitat_Urban_landscapes_9)
 
 
-
 #### models
 modfood<-lm(Estimate ~ foodspec, data = valuesfin,weights = 1/`Std. Error`)
 modhabitat<-lm(Estimate ~ habitatspec, data = valuesfin,weights = 1/`Std. Error`)
@@ -80,9 +103,15 @@ summary(modhabitat)
 summary(modsize)
 summary(modmobility)
 
-broom::glance(modfood)
+food <- broom::glance(modfood)
+habitat<- broom::glance(modhabitat)
+size<- broom::glance(modsize)
+sedentism<- broom::glance(modmobility)
 
-#### Plotting models
+outputs<- bind_rows(habitat, food, size, sedentism)
+outputs$test <- c("habitat", "food", "size", "sedentism")
+
+  #### Plotting models
 
 
 ggplot(modfood, aes(foodspec, Estimate)) + geom_point()
