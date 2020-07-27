@@ -68,7 +68,7 @@ data_df %>%
 setNames(as.list(a$COMMON.NAME),a$COMMON.NAME) %>% #need this weird trick to keep the species names
   map_df(process,data_df,.id="var") -> out
 
-out %>%
+drop<- out %>%
   spread(key="before.after",value="percent_observed") %>%
   mutate(percentage_drop=(`After`-`Before`)) %>%
   arrange(percentage_drop)
