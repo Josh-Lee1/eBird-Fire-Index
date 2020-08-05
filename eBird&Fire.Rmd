@@ -63,7 +63,8 @@ ggplot() +
   geom_sf(data = fireshape, size = 0.1, color = "black", fill = "black") + 
   geom_sf(data=ebird_points, size=0.5, color="green")+
   ggtitle("Fire Boundary with listpoints") + 
-  coord_sf()
+  coord_sf() +
+  
 ```
 ## add column for inside/outside using st_join
 ```{r}

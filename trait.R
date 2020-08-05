@@ -5,16 +5,13 @@ traits<- read.csv("trait_data.csv")
 
 fire_coefs<- rename(bird_response_df, species_name = species)
 
-foodtraits<- traits %>% 
-  select("X3_Taxon_common_name_2", "X99_Body_mass_average_8", "X163_Food_Fruit_10":"X173_Food_fish_or_invertebrates_Inland_waters_10", "X115_Feeding_habitat_Terrestrial_Arid_shrubland_9":"X145_Feeding_habitat_Urban_landscapes_9", "X193_National_movement_local_dispersal_13":"X197_National_movement_Irruptive_13") %>% 
-  rename(species = "X3_Taxon_common_name_2") %>% 
-  mutate(gsub(" ", "_", foodtraits$species)) %>% 
-  rename(species_name = `gsub(" ", "_", foodtraits$species)`)
+#foodtraits<- traits %>% 
+  #select("X3_Taxon_common_name_2", "X99_Body_mass_average_8", "X163_Food_Fruit_10":"X173_Food_fish_or_invertebrates_Inland_waters_10", "X115_Feeding_habitat_Terrestrial_Arid_shrubland_9":"X145_Feeding_habitat_Urban_landscapes_9", "X193_National_movement_local_dispersal_13":"X197_National_movement_Irruptive_13") %>% 
+  #rename(species = "X3_Taxon_common_name_2") %>% 
+  #mutate(gsub(" ", "_", foodtraits$species)) %>% 
+  #rename(species_name = `gsub(" ", "_", foodtraits$species)`)
   
-
-#### needs fixing!!!
-
-traitseds<- recode(foodtraits$species_name, 'Black-faced_Cuckoo-shrike' = "Black-faced_Cuckooshrike",
+#traitseds<- recode(foodtraits$species_name, 'Black-faced_Cuckoo-shrike' = "Black-faced_Cuckooshrike",
                   'European_Common_Blackbird' = "Eurasian_Blackbird",
                   'European_Common_Starling' = "European_Starling",
                   'Grey_Butcherbird' = "Gray_Butcherbird",
@@ -29,22 +26,49 @@ traitseds<- recode(foodtraits$species_name, 'Black-faced_Cuckoo-shrike' = "Black
                   'Jacky_Winter' = "Jacky-winter")
 
 
+foodtraits<- traits %>% 
+  dplyr::select("X3_Taxon_common_name_2", "X99_Body_mass_average_8", "X163_Food_Fruit_10":"X173_Food_fish_or_invertebrates_Inland_waters_10", "X115_Feeding_habitat_Terrestrial_Arid_shrubland_9":"X145_Feeding_habitat_Urban_landscapes_9", "X193_National_movement_local_dispersal_13":"X197_National_movement_Irruptive_13") %>% 
+  rename(species_name = "X3_Taxon_common_name_2") %>% 
+  mutate(species_name=gsub(" ", "_", species_name)) 
 
-  recode(Jacky_Winter = Jacky-winter) %>% 
-  filter(foodtraits$species, species_name %in% fire_coefs$species) %>% 
-  left_join(fire_coefs, foodtraits, by = "species_name")
+
+foodtraits$species_name<- recode(foodtraits$species_name, 'Black-faced_Cuckoo-shrike' = "Black-faced_Cuckooshrike",
+                   'Common_Blackbird' = "Eurasian_Blackbird",
+                   'Common_Starling' = "European_Starling",
+                   'Grey_Butcherbird' = "Gray_Butcherbird",
+                   'Grey_Fantail' = "Gray_Fantail",
+                   'Grey_Shrike-thrush' = "Gray_Shrikethrush",
+                   'Australian_Wood_Duck' = "Maned_Duck",
+                   'Red-browed_Finch' = "Red-browed_Firetail",
+                   'Scarlet_Honeyeater' = "Scarlet_Myzomela",
+                   'Superb_Fairy-wren' = "Superb_Fairywren",
+                   'Variegated_Fairy-wren' = "Variegated_Fairywren",
+                   'Willie_Wagtail' = "Willie-wagtail", 
+                   'Jacky_Winter' = "Jacky-winter")
+
+traitsfin <- foodtraits %>% 
+  left_join(fire_coefs, foodtraits, by = "species_name") %>% 
+  filter(species_name %in% fire_coefs$species_name)
+ 
 
 
 
-values<- foodtraits %>% 
+values<- traitsfin %>% 
   filter(Term == "before.afterBefore") %>% 
-  mutate(X99_Body_mass_average_8 = as.numeric(X99_Body_mass_average_8))
+  mutate(X99_Body_mass_average_8 = as.numeric(X99_Body_mass_average_8)) %>%
+  as.factor("X193_National_movement_local_dispersal_13",
+               "X194_National_movement_Partial_migrant_13",
+               "X195_National_movement_Total_migrant_13",
+               "X196_National_movement_Nomadic_or_opportunistic_13",
+               "X197_National_movement_Irruptive_13")
 
-check<- select(responses, species)
-check1 <- select(valuesfin, species)
-check2<- left_join(check1, check, by = "species")
+tot<- as.integer(values$X193_National_movement_local_dispersal_13,
+          values$X194_National_movement_Partial_migrant_13,
+          values$X195_National_movement_Total_migrant_13,
+          values$X196_National_movement_Nomadic_or_opportunistic_13,
+          values$X197_National_movement_Irruptive_13)
 
-
+#check<- select(responses, species)
 
 
 valuesfin<- values %>% 
@@ -89,8 +113,12 @@ X141_Feeding_habitat_Marine_Temperate_inshore_9 +
 X142_Feeding_habitat_Marine_Warm_inshore_9 +                                      
 X143_Feeding_habitat_Other_non.Australian_habitat_9 +                             
 X144_Feeding_habitat_Agricultural_landscapes_9 +
-X145_Feeding_habitat_Urban_landscapes_9)
-
+X145_Feeding_habitat_Urban_landscapes_9)%>% 
+  mutate(movetot = X193_National_movement_local_dispersal_13 +
+           X194_National_movement_Partial_migrant_13 +
+           X195_National_movement_Total_migrant_13 +
+           X196_National_movement_Nomadic_or_opportunistic_13 +
+           X197_National_movement_Irruptive_13)
 
 #### models
 modfood<-lm(Estimate ~ foodspec, data = valuesfin,weights = 1/`Std. Error`)
@@ -109,19 +137,26 @@ size<- broom::glance(modsize)
 sedentism<- broom::glance(modmobility)
 
 outputs<- bind_rows(habitat, food, size, sedentism)
-outputs$test <- c("habitat", "food", "size", "sedentism")
+outputs$test <- c("Habitat Specialism", "Food Specialism", "Body Size", "Sedentism")
+
+write.csv(outputs, "results.csv")
 
   #### Plotting models
 
+df<- valuesfin %>% 
+  mutate(Estimate, value = Estimate*-1)
 
-ggplot(modfood, aes(foodspec, Estimate)) + geom_point()
-ggplot(modsize, aes(X99_Body_mass_average_8, Estimate)) + geom_point()
-ggplot(modhabitat, aes(habitatspec, Estimate)) + geom_point()
-ggplot(modmobility, aes(X193_National_movement_local_dispersal_13, Estimate)) + geom_point()
+ggplot(modfood, aes(foodspec, Estimate*-1)) + geom_point() + theme_bw() + xlab("Number of Feeding Guilds") + ylab("Fire Response")
+ggsave("figures/foodmodel.PNG")
+ggplot(modsize, aes(X99_Body_mass_average_8, Estimate*-1)) + geom_point()+ scale_x_log10()+ theme_bw() + xlab("Body Mass") + ylab("Fire Response")+ geom_smooth(method='lm')
+ggsave("figures/sizemodel.PNG")
+ggplot(modhabitat, aes(habitatspec, Estimate*-1)) + geom_point()+ theme_bw() + xlab("Number of Habitats") + ylab("Fire Response")
+ggsave("figures/habitatmodel.PNG")
+ggplot(modmobility, aes(X193_National_movement_local_dispersal_13, Estimate*-1)) + geom_point()+ theme_bw() + xlab("Sedentism") + ylab("Fire Response")
+ggsave("figures/mobilitymodel.PNG")
 
 
-
-
+look<- select(valuesfin, species_name, X99_Body_mass_average_8, foodspec, habitatspec, X193_National_movement_local_dispersal_13, Estimate)
 
 
 ######### making plots
