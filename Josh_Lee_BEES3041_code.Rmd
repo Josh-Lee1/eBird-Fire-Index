@@ -1,0 +1,495 @@
+---
+title: "Josh Lee's BEES3041 Code"
+output: html_notebook
+---
+
+# Libaries used:
+```{r}
+library(dplyr)
+library(ggplot2)
+library(sf)
+library(tidyverse)
+library(anchors)
+library(readr)
+library(tidyverse)
+library(lubridate)
+library(rnaturalearth)
+library(mgcv)
+```
+
+# Split files using a linux command line and read in first file (baa)
+Since the data from eBird was so large, we split into 230 files with 100,000 rows
+```{r}
+system("less -n1 RawData/ebd_AU_relApr-2020.txt 2>&1", intern = FALSE, show.output.on.console = TRUE)
+baa<- read.delim("RawData/baa", header = TRUE, sep="\t")
+head(baa)
+view(baa)
+```
+# Filtering unwanted checklists
+## Protocol used for filtering and selecting:  
+Removed Incomplete checklists  
+Removed checklists Duration.Minutes less than 10m and more than 5hrs  
+Removed Checklists Effort.Distance more than 10km  
+Keeping Locality ID, Sampling event identifier, Lat and Long, Date  
+Removing duplicates 
+
+```{r}
+baatrimmed<- baa %>% 
+  filter(ALL.SPECIES.REPORTED==1, EFFORT.DISTANCE.KM<10, DURATION.MINUTES<300, DURATION.MINUTES>10) %>% 
+  select(SAMPLING.EVENT.IDENTIFIER, LOCALITY.ID, LATITUDE, LONGITUDE, OBSERVATION.DATE) %>% 
+  distinct()
+```
+
+# Spacial Processing steps:
+## Read in fire shapefile
+National Indicative Aggregated Fire Extent Datasets from Department of Agriculture Water and the Environment  
+```{r}
+fireshape<- st_read("National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211/National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211.shp")
+```
+
+## Map of shapefile
+```{r}
+ggplot() + 
+  geom_sf(data = fireshape, size = 0.1, color = "black", fill = "black") + 
+  ggtitle("Fire Boundary Plot") + 
+  coord_sf()
+```
+## Convert ebird checklists to sf object with CRS code from fire shapefile
+Make the eBird data a sf object, then match CRS(Coordinate Reference System) with fire shapefile
+```{r}
+ebird_points <- st_as_sf(baatrimmed, coords=c("LONGITUDE", "LATITUDE"), crs=st_crs(fireshape))
+```
+## Make a map of the points using ggplot and geom_sf on the fire shapefile map
+```{r}
+ggplot() + 
+  geom_sf(data = fireshape, size = 0.1, color = "black", fill = "black") + 
+  geom_sf(data=ebird_points, size=0.5, color="green")+
+  ggtitle("Fire Boundary with listpoints") + 
+  coord_sf() +
+```
+## Add column for inside/outside using st_join
+Plotting didnt like the NAs or 0s so had to convert to 1s(Inside burnt zone) and 2s(Outside burnt zone)
+
+```{r}
+pointsinout<-st_join(ebird_points, fireshape, join = st_within)
+View(pointsinout)
+count(pointsinout, Id)
+list(pointsinout$Id)
+
+inout<- replace.value(pointsinout, "Id", from = 0, to = 1)
+inout[is.na(inout)] = 0
+inout1<- replace.value(inout, "Id", from = 0, to = 2)
+count(inout, Id)
+```
+
+## Make a map with points coloured by inside/outside
+Blue=Fire extent, Red=Checklists outisde, Black=Checklists Inside
+```{r}
+MapbyInOut<- ggplot() + 
+  geom_sf(data = fireshape, size = 0.1, color = "blue", fill = "blue") + 
+  geom_sf(data=inout1, size=0.5, colour = inout1$Id)+
+  ggtitle("Points by In-Out") + 
+  coord_sf()
+print(MapbyInOut)
+```
+
+# Write out as rds to a directory called processed_data
+```{r}
+dir.create("processed_data")
+saveRDS(MapbyInOut, "processed_data/MapbyInOut.rds")
+```
+
+# Get a column names vector for usage in the next function
+```{r}
+fireshape_current<- st_read("National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211/National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211.shp")
+
+
+baa <- read_delim("RawData/baa", "\t", 
+                  escape_double = FALSE, trim_ws = TRUE)
+colnames(baa)<-gsub(" ",".",colnames(baa))
+
+column_names <- colnames(baa)
+```
+
+# Writing the function to read in, filter data and convert to spatial feature matched with fire shapefile
+```{r}
+read_and_process_raw_ebird <- function(filename,fireshape=fireshape){
+  #system("less -n1 RawData/ebd_AU_relApr-2020.txt 2>&1", intern = FALSE, show.output.on.console = TRUE)
+  baa <- read_delim(filename, "\t", 
+                    escape_double = FALSE, trim_ws = TRUE,
+                    col_names = FALSE)
+  
+  baa <- if (baa[1,1]=="GLOBAL UNIQUE IDENTIFIER") {
+    baa %>% 
+      slice(2:100000)
+  } else {
+    baa
+  }
+  
+  colnames(baa) <- column_names
+  
+  
+  baatrimmed <- baa %>% 
+    filter(ALL.SPECIES.REPORTED==1, EFFORT.DISTANCE.KM<10, DURATION.MINUTES<300, DURATION.MINUTES>10) %>% 
+    dplyr::select(SAMPLING.EVENT.IDENTIFIER, LOCALITY.ID, LATITUDE, LONGITUDE, OBSERVATION.DATE) %>% 
+    distinct()
+  
+  ebird_points <- st_as_sf(baatrimmed, coords=c("LONGITUDE", "LATITUDE"), crs=st_crs(fireshape))
+  
+  pointsin <- fireshape %>% st_join(ebird_points) %>% 
+    st_set_geometry(NULL) %>% 
+    dplyr::select(SAMPLING.EVENT.IDENTIFIER) %>% 
+    mutate(in_fire="True")
+  
+  pointsinout <- baatrimmed %>%
+    left_join(., pointsin)
+  
+  saveRDS(pointsinout,file = paste0("filteredData/", gsub("RawData/", "",filename), ".rds"))
+}
+```
+
+# Apply function to all 230 files
+```{r}
+all_files<-list.files("RawData",full.names = TRUE)
+
+
+for(i in 1:length(all_files)){
+  read_and_process_raw_ebird(filename=all_files[i],fireshape=fireshape_current)
+}
+```
+
+# Bind outputs of read_and_process_raw_ebird to one data frame
+```{r}
+all_files<-list.files("filteredData",full.names = TRUE)
+first_list<-list()
+
+
+for (i in 1:length(all_files)){
+  print(i)
+  temp<-readRDS(all_files[i])
+  temp$LATITUDE<-as.numeric(temp$LATITUDE)
+  temp$LONGITUDE<-as.numeric(temp$LONGITUDE)
+  temp$OBSERVATION.DATE<-as.character(temp$OBSERVATION.DATE)
+  first_list<-bind_rows(first_list,temp)
+}
+```
+
+# Counting data in relation to fire
+```{r}
+first_list$in_fire <- recode(first_list$in_fire,True = "In Fire")
+first_list$in_fire <- replace_na(first_list$in_fire,"Not in Fire")
+
+table(first_list$in_fire)
+
+first_list$OBSERVATION.DATE<-ymd(first_list$OBSERVATION.DATE)
+first_list$after_fire<-first_list$OBSERVATION.DATE > ymd("2020-01-10")
+
+table(first_list$in_fire,first_list$after_fire)
+```
+
+# Filtering out checklists outside of fire, define column names using first file
+```{r}
+list_infire<- filter(first_list, in_fire == "In Fire")
+baa <- read_delim("RawData/baa", "\t", escape_double = FALSE, trim_ws = TRUE)
+colnames(baa)<-gsub(" ",".",colnames(baa))
+column_names <- colnames(baa)
+baa_inside<- semi_join(baa, list_infire, by = "SAMPLING.EVENT.IDENTIFIER")
+```
+
+# Writing function to extract species data for these checklists in all data files
+```{r}
+extract_species_data <- function(filename, list_infire){
+  baa <- read_delim(filename, "\t", 
+                    escape_double = FALSE, trim_ws = TRUE,
+                    col_names = FALSE)
+  
+  baa <- if (baa[1,1]=="GLOBAL.UNIQUE.IDENTIFIER") {
+    baa %>% 
+      slice(2:100000)
+  } else {
+    baa
+  }
+  
+  colnames(baa) <- column_names
+  
+  
+  baa_inside<- semi_join(baa, list_infire, by = "SAMPLING.EVENT.IDENTIFIER")
+  
+  
+  saveRDS(baa_inside,file = paste0("rawspeciesdata/", gsub("RawData/", "",filename), ".rds"))
+}
+
+
+all_files<-list.files("RawData",full.names = TRUE)
+
+
+for(i in 1:length(all_files)){
+  extract_species_data(filename=all_files[i], list_infire)
+}
+```
+
+# Binding these output files into one data frame with all bird observations from within fire boundary 
+
+```{r}
+all_files<-list.files("rawspeciesdata",full.names = TRUE)
+second_list<- list()
+
+for (i in 1:length(all_files)){
+  print(i)
+  temp<-readRDS(all_files[i])
+   second_list<-bind_rows(second_list,temp)
+}
+```
+
+# Change working directory to folder just created, read in all files and define date variable using a fuction, also making minor string changes 
+```{r}
+setwd("rawspeciesdata/")
+
+read_dat_function <- function(file_name) {
+  dat <- readRDS(file_name)
+  dat$OBSERVATION.DATE<-ymd(dat$OBSERVATION.DATE)
+  return(dat)
+}
+
+files <- list.files("../rawspeciesdata/")
+
+data <- lapply(files, read_dat_function)
+data_df <- do.call(rbind, data)
+data_df$LATITUDE<-as.numeric(data_df$LATITUDE)
+data_df<-filter(data_df,LATITUDE < -25)
+
+length(unique(data_df$SAMPLING.EVENT.IDENTIFIER))
+length(unique(data_df$COMMON.NAME))
+```
+
+# Reset wd, write another function to locate and assign checklists with species x and checklists without species x. Apply cutoff date for before/after fire event (10th Jan 2020). Create GAM for species x and write into new folder (model_objects)
+```{r}
+setwd("..")
+
+process<-function(species_name,data_df=data_df){
+  sl <- data_df %>%
+    dplyr::filter(COMMON.NAME == species_name) %>%
+    mutate(present=1)
+  
+  sl_lists <- sl %>%
+    dplyr::select(SAMPLING.EVENT.IDENTIFIER) %>%
+    distinct()
+  
+  lists_without <- data_df %>%
+    dplyr::filter(! SAMPLING.EVENT.IDENTIFIER %in% sl_lists$SAMPLING.EVENT.IDENTIFIER) %>%
+    dplyr::select(SAMPLING.EVENT.IDENTIFIER,OBSERVATION.DATE, DURATION.MINUTES, LATITUDE, LONGITUDE,
+                  EFFORT.DISTANCE.KM, COUNTY.CODE, OBSERVER.ID) %>% 
+    distinct() %>%
+    mutate(present=0)
+  
+  final_sl_dat <- sl %>%
+    bind_rows(lists_without) %>%
+    mutate(DURATION.MINUTES=as.numeric(DURATION.MINUTES),
+           EFFORT.DISTANCE.KM=as.numeric(EFFORT.DISTANCE.KM)) %>%
+    mutate(MONTH=month(OBSERVATION.DATE)) %>%
+    mutate(before.after=ifelse(OBSERVATION.DATE>ymd("2020-01-10"), "After", "Before"))
+  
+  mod <- mgcv::gam(present ~ before.after + s(DURATION.MINUTES) +
+                     s(EFFORT.DISTANCE.KM) + s(MONTH, bs="cc", k=11), 
+                   family="binomial", data=final_sl_dat)
+  
+  saveRDS(mod, paste0("model_objects/", gsub(" ", "_", species_name), ".RDS"))
+  
+  final_sl_dat %>%
+    group_by(before.after) %>%
+    summarize(percent_observed=sum(present)/n())->out
+  return(out)
+}
+```
+
+# Apply this function to all species in the df with more than 500 observations 
+## Included funny trick to keep species names
+```{r}
+data_df %>%
+  group_by(COMMON.NAME) %>%
+  count(num.obs=n()) %>%
+  filter(num.obs>500)->a
+
+setNames(as.list(a$COMMON.NAME),a$COMMON.NAME) %>%
+  map_df(process,data_df,.id="var") -> out
+
+drop<- out %>%
+  spread(key="before.after",value="percent_observed") %>%
+  mutate(percentage_drop=(`After`-`Before`)) %>%
+  arrange(percentage_drop)
+
+```
+
+# Writing function to extract model summaries and map_df into one df
+
+```{r}
+all_files <- list.files("model_objects/")
+
+  extractingcoeffse_function <- function(file_name) {
+    data <- readRDS(paste0("model_objects/", file_name))
+    datsum<- summary(data)
+    se<- datsum$se
+    deviance<- datsum$dev.expl
+    n<-datsum$n
+    wgoods<- as.data.frame(summary(data)$p.tab) %>%
+      rownames_to_column(var="Term") %>%
+      mutate(deviance=deviance) %>%
+      mutate(N=n) %>%
+      mutate(converged=data$converged) %>%
+      mutate(species=gsub(".RDS", "", file_name))
+    return(wgoods)
+  }
+  
+  bird_response_df <- map_df(all_files, extractingcoeffse_function)
+```
+
+# Read in trait data obtained from (Garnett et al., 2015)
+T Garnett, Stephen; E Duursma, Daisy; Ehmke, Glenn; Guay, Patrick-Jean; Stewart, Alistair; K Szabo, Judit; et al. (2015): Australian Bird Data Version 1.0 (2015). figshare. Collection. https://doi.org/10.6084/m9.figshare.1499292
+
+```{r}
+traits<- read.csv("trait_data.csv")
+```
+
+# Select only traits of interest, and renaming species where there were discrepancies between the two dfs
+```{r}
+fire_coefs<- rename(bird_response_df, species_name = species)
+
+
+foodtraits<- traits %>% 
+  select("X3_Taxon_common_name_2", "X99_Body_mass_average_8", "X163_Food_Fruit_10":"X173_Food_fish_or_invertebrates_Inland_waters_10", "X115_Feeding_habitat_Terrestrial_Arid_shrubland_9":"X145_Feeding_habitat_Urban_landscapes_9", "X193_National_movement_local_dispersal_13":"X197_National_movement_Irruptive_13") %>% 
+  rename(species_name = "X3_Taxon_common_name_2") %>% 
+  mutate(species_name=gsub(" ", "_", species_name)) 
+
+
+foodtraits$species_name<- recode(foodtraits$species_name, 'Black-faced_Cuckoo-shrike' = "Black-faced_Cuckooshrike",
+                   'Common_Blackbird' = "Eurasian_Blackbird",
+                   'Common_Starling' = "European_Starling",
+                   'Grey_Butcherbird' = "Gray_Butcherbird",
+                   'Grey_Fantail' = "Gray_Fantail",
+                   'Grey_Shrike-thrush' = "Gray_Shrikethrush",
+                   'Australian_Wood_Duck' = "Maned_Duck",
+                   'Red-browed_Finch' = "Red-browed_Firetail",
+                   'Scarlet_Honeyeater' = "Scarlet_Myzomela",
+                   'Superb_Fairy-wren' = "Superb_Fairywren",
+                   'Variegated_Fairy-wren' = "Variegated_Fairywren",
+                   'Willie_Wagtail' = "Willie-wagtail", 
+                   'Jacky_Winter' = "Jacky-winter")
+
+traitsfin <- foodtraits %>% 
+  left_join(fire_coefs, foodtraits, by = "species_name") %>% 
+  filter(species_name %in% fire_coefs$species_name)
+```
+
+## Minor string changes 
+```{r}
+values<- traitsfin %>% 
+  filter(Term == "before.afterBefore") %>% 
+  mutate(X99_Body_mass_average_8 = as.numeric(X99_Body_mass_average_8)) %>%
+  as.factor("X193_National_movement_local_dispersal_13",
+               "X194_National_movement_Partial_migrant_13",
+               "X195_National_movement_Total_migrant_13",
+               "X196_National_movement_Nomadic_or_opportunistic_13",
+               "X197_National_movement_Irruptive_13")
+
+tot<- as.integer(values$X193_National_movement_local_dispersal_13,
+          values$X194_National_movement_Partial_migrant_13,
+          values$X195_National_movement_Total_migrant_13,
+          values$X196_National_movement_Nomadic_or_opportunistic_13,
+          values$X197_National_movement_Irruptive_13)
+```
+
+# Calculation of habitat specialism and feeding specialism
+## These use original variables from the trait data to make new variables that will be used in our linear models.
+```{r}
+valuesfin<- values %>% 
+  mutate(foodspec = X163_Food_Fruit_10 +                                                          
+         X164_Food_Nectar_or_pollen_10 +                                                 
+         X165_Food_Seeds_10 +                                                              
+         X166_Food_Foliage_or_herbs_10 +                                                   
+         X167_Food_Corms_or_tubers +                                                       
+         X168_Food_Terrestrial_invertebrates_10 +                                          
+         X169_Food_Terrestrial_vertebrates_10 +                                            
+         X170_Food_Carrion_10 +                                                            
+         X171_Food_Intertidal_invertebrates_10 +                                           
+         X172_Food_Fish_or_invertebrates_Marine_10 +                                       
+         X173_Food_fish_or_invertebrates_Inland_waters_10) %>% 
+  mutate(habitatspec = X115_Feeding_habitat_Terrestrial_Arid_shrubland_9 +
+           X116_Feeding_habitat_Terrestrial_Chenopod_shrubland_9 +
+           X117_Feeding_habitat_Terrestrial_Heath_9 + 
+           X118_Feeding_habitat_Terrestrial_Triodia_hummock_grassland_9 + 
+           X119_Feeding_habitat_Terrestrial_Other_grassland_9 + 
+           X120_Feeding_habitat_Terrestrial_Mallee_9 + 
+           X121_Feeding_habitat_Terrestrial_Tropical_savanna_woodland_9 + 
+           X122_Feeding_habitat_Terrestrial_Temperate_dry_sclerophyll_forest_and_woodland_9 +
+X123_Feeding_habitat_Terrestrial_Temperate_wet_sclerophyll_forest_and_woodland_9 +
+X124_Feeding_habitat_Terrestrial_Rainforest_9 +                                   
+X125_Feeding_habitat_Terrestrial_Mangrove_trees_9 +                               
+X126_Feeding_habitat_Inland_waters_Rivers_and_streams_9 +                         
+X127_Feeding_habitat_Inland_waters_Deep_open_water_9 +                            
+X128_Feeding_habitat_Inland_waters_Shallow_open_water_9 +                         
+X129_Feeding_habitat_Inland_waters_Reeds_and_tall_wet_grassland_9 +               
+X130_Feeding_habitat_Inland_waters_Low_marshland_and_wet_grassland_9 +            
+X131_Feeding_habitat_Coastal_Sandy_9 +                                            
+X132_Feeding_habitat_Coastal_Rocky_9 +                                            
+X133_Feeding_habitat_Coastal_Soft_mud_9 +                                         
+X134_Feeding_habitat_Coastal_Saltmarsh_9 +                                        
+X135_Feeding_habitat_Coastal_Mangrove_floor_9 +                                   
+X136_Feeding_habitat_Marine_Very_cold_pelagic_9 +                                 
+X137_Feeding_habitat_Marine_Cold_pelagic_9 +                                      
+X138_Feeding_habitat_Marine_Temperate_pelagic_9 +                                 
+X139_Feeding_habitat_Marine_Warm_pelagic_9 +                                      
+X140_Feeding_habitat_Marine_Cold_inshore_9 +                                      
+X141_Feeding_habitat_Marine_Temperate_inshore_9 +                                 
+X142_Feeding_habitat_Marine_Warm_inshore_9 +                                      
+X143_Feeding_habitat_Other_non.Australian_habitat_9 +                             
+X144_Feeding_habitat_Agricultural_landscapes_9 +
+X145_Feeding_habitat_Urban_landscapes_9)%>% 
+  mutate(movetot = X193_National_movement_local_dispersal_13 +
+           X194_National_movement_Partial_migrant_13 +
+           X195_National_movement_Total_migrant_13 +
+           X196_National_movement_Nomadic_or_opportunistic_13 +
+           X197_National_movement_Irruptive_13)
+```
+
+# Running linear models between fire response and food specialism, habitat specialism, size and sedentism.
+## Place results into final data frame
+```{r}
+#### models
+modfood<-lm(Estimate ~ foodspec, data = valuesfin,weights = 1/`Std. Error`)
+modhabitat<-lm(Estimate ~ habitatspec, data = valuesfin,weights = 1/`Std. Error`)
+modsize<-lm(Estimate ~ X99_Body_mass_average_8, data = valuesfin,weights = 1/`Std. Error`)
+modmobility<-lm(Estimate ~ X193_National_movement_local_dispersal_13, data = valuesfin,weights = 1/`Std. Error`)
+
+summary(modfood)
+summary(modhabitat)
+summary(modsize)
+summary(modmobility)
+
+food <- broom::glance(modfood)
+habitat<- broom::glance(modhabitat)
+size<- broom::glance(modsize)
+sedentism<- broom::glance(modmobility)
+
+outputs<- bind_rows(habitat, food, size, sedentism)
+outputs$test <- c("Habitat Specialism", "Food Specialism", "Body Size", "Sedentism")
+
+write.csv(outputs, "results.csv")
+```
+
+# Plotting models to visualise results
+```{r}
+
+df<- valuesfin %>% 
+  mutate(Estimate, value = Estimate*-1)
+
+ggplot(modfood, aes(foodspec, Estimate*-1)) + geom_point() + theme_bw() + xlab("Number of Feeding Guilds") + ylab("Fire Response")
+ggsave("figures/foodmodel.PNG")
+ggplot(modsize, aes(X99_Body_mass_average_8, Estimate*-1)) + geom_point()+ scale_x_log10()+ theme_bw() + xlab("Body Mass") + ylab("Fire Response")+ geom_smooth(method='lm')
+ggsave("figures/sizemodel.PNG")
+ggplot(modhabitat, aes(habitatspec, Estimate*-1)) + geom_point()+ theme_bw() + xlab("Number of Habitats") + ylab("Fire Response")
+ggsave("figures/habitatmodel.PNG")
+ggplot(modmobility, aes(X193_National_movement_local_dispersal_13, Estimate*-1)) + geom_point()+ theme_bw() + xlab("Sedentism") + ylab("Fire Response")
+ggsave("figures/mobilitymodel.PNG")
+
+```
+
