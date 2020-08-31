@@ -22,7 +22,7 @@ library(mgcv)
 Since the data from eBird was so large, we split into 230 files with 100,000 rows
 ```{r}
 system("less -n1 RawData/ebd_AU_relApr-2020.txt 2>&1", intern = FALSE, show.output.on.console = TRUE)
-baa<- read.delim("RawData/baa", header = TRUE, sep="\t")
+baa<- read.delim("Data/Raw/RawEbird/baa", header = TRUE, sep="\t")
 head(baa)
 view(baa)
 ```
@@ -37,7 +37,7 @@ Removing duplicates
 ```{r}
 baatrimmed<- baa %>% 
   filter(ALL.SPECIES.REPORTED==1, EFFORT.DISTANCE.KM<10, DURATION.MINUTES<300, DURATION.MINUTES>10) %>% 
-  select(SAMPLING.EVENT.IDENTIFIER, LOCALITY.ID, LATITUDE, LONGITUDE, OBSERVATION.DATE) %>% 
+  dplyr::select(SAMPLING.EVENT.IDENTIFIER, LOCALITY.ID, LATITUDE, LONGITUDE, OBSERVATION.DATE) %>% 
   distinct()
 ```
 
@@ -45,7 +45,7 @@ baatrimmed<- baa %>%
 ## Read in fire shapefile
 National Indicative Aggregated Fire Extent Datasets from Department of Agriculture Water and the Environment  
 ```{r}
-fireshape<- st_read("National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211/National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211.shp")
+fireshape<- st_read("Data/Raw/National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211/National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211.shp")
 ```
 
 ## Map of shapefile
@@ -66,7 +66,7 @@ ggplot() +
   geom_sf(data = fireshape, size = 0.1, color = "black", fill = "black") + 
   geom_sf(data=ebird_points, size=0.5, color="green")+
   ggtitle("Fire Boundary with listpoints") + 
-  coord_sf() +
+  coord_sf()
 ```
 ## Add column for inside/outside using st_join
 Plotting didnt like the NAs or 0s so had to convert to 1s(Inside burnt zone) and 2s(Outside burnt zone)
@@ -96,16 +96,15 @@ print(MapbyInOut)
 
 # Write out as rds to a directory called processed_data
 ```{r}
-dir.create("processed_data")
-saveRDS(MapbyInOut, "processed_data/MapbyInOut.rds")
+saveRDS(MapbyInOut, "Data/Processed/MapbyInOut.rds")
 ```
 
 # Get a column names vector for usage in the next function
 ```{r}
-fireshape_current<- st_read("National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211/National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211.shp")
+fireshape_current<- st_read("Data/Raw/National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211/National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211.shp")
 
 
-baa <- read_delim("RawData/baa", "\t", 
+baa <- read_delim("Data/Raw/RawEbird/baa", "\t", 
                   escape_double = FALSE, trim_ws = TRUE)
 colnames(baa)<-gsub(" ",".",colnames(baa))
 
@@ -145,13 +144,13 @@ read_and_process_raw_ebird <- function(filename,fireshape=fireshape){
   pointsinout <- baatrimmed %>%
     left_join(., pointsin)
   
-  saveRDS(pointsinout,file = paste0("filteredData/", gsub("RawData/", "",filename), ".rds"))
+  saveRDS(pointsinout,file = paste0("Data/Processed/filteredData/", gsub("RawData/", "",filename), ".rds"))
 }
 ```
 
 # Apply function to all 230 files
 ```{r}
-all_files<-list.files("RawData",full.names = TRUE)
+all_files<-list.files("Data/Raw/RawEbird/",full.names = TRUE)
 
 
 for(i in 1:length(all_files)){
@@ -161,7 +160,7 @@ for(i in 1:length(all_files)){
 
 # Bind outputs of read_and_process_raw_ebird to one data frame
 ```{r}
-all_files<-list.files("filteredData",full.names = TRUE)
+all_files<-list.files("Data/Processed/filteredData",full.names = TRUE)
 first_list<-list()
 
 
@@ -191,7 +190,7 @@ table(first_list$in_fire,first_list$after_fire)
 # Filtering out checklists outside of fire, define column names using first file
 ```{r}
 list_infire<- filter(first_list, in_fire == "In Fire")
-baa <- read_delim("RawData/baa", "\t", escape_double = FALSE, trim_ws = TRUE)
+baa <- read_delim("Data/Raw/RawEbird/baa", "\t", escape_double = FALSE, trim_ws = TRUE)
 colnames(baa)<-gsub(" ",".",colnames(baa))
 column_names <- colnames(baa)
 baa_inside<- semi_join(baa, list_infire, by = "SAMPLING.EVENT.IDENTIFIER")
@@ -217,7 +216,7 @@ extract_species_data <- function(filename, list_infire){
   baa_inside<- semi_join(baa, list_infire, by = "SAMPLING.EVENT.IDENTIFIER")
   
   
-  saveRDS(baa_inside,file = paste0("rawspeciesdata/", gsub("RawData/", "",filename), ".rds"))
+  saveRDS(baa_inside,file = paste0("Data/Raw/rawspeciesdata/", gsub("Data/Raw/RawEbird/", "",filename), ".rds"))
 }
 
 
@@ -232,7 +231,7 @@ for(i in 1:length(all_files)){
 # Binding these output files into one data frame with all bird observations from within fire boundary 
 
 ```{r}
-all_files<-list.files("rawspeciesdata",full.names = TRUE)
+all_files<-list.files("Data/Raw/rawspeciesdata",full.names = TRUE)
 second_list<- list()
 
 for (i in 1:length(all_files)){
@@ -244,7 +243,7 @@ for (i in 1:length(all_files)){
 
 # Change working directory to folder just created, read in all files and define date variable using a fuction, also making minor string changes 
 ```{r}
-setwd("rawspeciesdata/")
+setwd("Data/Raw/rawspeciesdata/")
 
 read_dat_function <- function(file_name) {
   dat <- readRDS(file_name)
@@ -294,7 +293,7 @@ process<-function(species_name,data_df=data_df){
                      s(EFFORT.DISTANCE.KM) + s(MONTH, bs="cc", k=11), 
                    family="binomial", data=final_sl_dat)
   
-  saveRDS(mod, paste0("model_objects/", gsub(" ", "_", species_name), ".RDS"))
+  saveRDS(mod, paste0("Output/data/model_objects/", gsub(" ", "_", species_name), ".RDS"))
   
   final_sl_dat %>%
     group_by(before.after) %>%
@@ -324,10 +323,10 @@ drop<- out %>%
 # Writing function to extract model summaries and map_df into one df
 
 ```{r}
-all_files <- list.files("model_objects/")
+all_files <- list.files("Output/data/model_objects/")
 
   extractingcoeffse_function <- function(file_name) {
-    data <- readRDS(paste0("model_objects/", file_name))
+    data <- readRDS(paste0("Output/data/model_objects/", file_name))
     datsum<- summary(data)
     se<- datsum$se
     deviance<- datsum$dev.expl
@@ -348,7 +347,7 @@ all_files <- list.files("model_objects/")
 T Garnett, Stephen; E Duursma, Daisy; Ehmke, Glenn; Guay, Patrick-Jean; Stewart, Alistair; K Szabo, Judit; et al. (2015): Australian Bird Data Version 1.0 (2015). figshare. Collection. https://doi.org/10.6084/m9.figshare.1499292
 
 ```{r}
-traits<- read.csv("trait_data.csv")
+traits<- read.csv("Data/Raw/trait_data.csv")
 ```
 
 # Select only traits of interest, and renaming species where there were discrepancies between the two dfs
@@ -474,7 +473,7 @@ sedentism<- broom::glance(modmobility)
 outputs<- bind_rows(habitat, food, size, sedentism)
 outputs$test <- c("Habitat Specialism", "Food Specialism", "Body Size", "Sedentism")
 
-write.csv(outputs, "results.csv")
+write.csv(outputs, "Output/results.csv")
 ```
 
 # Plotting models to visualise results
@@ -484,13 +483,13 @@ df<- valuesfin %>%
   mutate(Estimate, value = Estimate*-1)
 
 ggplot(modfood, aes(foodspec, Estimate*-1)) + geom_point() + theme_bw() + xlab("Number of Feeding Guilds") + ylab("Fire Response")
-ggsave("figures/foodmodel.PNG")
+ggsave("Output/figures/foodmodel.PNG")
 ggplot(modsize, aes(X99_Body_mass_average_8, Estimate*-1)) + geom_point()+ scale_x_log10()+ theme_bw() + xlab("Body Mass") + ylab("Fire Response")+ geom_smooth(method='lm')
-ggsave("figures/sizemodel.PNG")
+ggsave("Output/figures/sizemodel.PNG")
 ggplot(modhabitat, aes(habitatspec, Estimate*-1)) + geom_point()+ theme_bw() + xlab("Number of Habitats") + ylab("Fire Response")
-ggsave("figures/habitatmodel.PNG")
+ggsave("Output/figures/habitatmodel.PNG")
 ggplot(modmobility, aes(X193_National_movement_local_dispersal_13, Estimate*-1)) + geom_point()+ theme_bw() + xlab("Sedentism") + ylab("Fire Response")
-ggsave("figures/mobilitymodel.PNG")
+ggsave("Output/figures/mobilitymodel.PNG")
 
 ```
 
