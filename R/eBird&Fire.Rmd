@@ -1,0 +1,124 @@
+---
+title: "eBird and Fire"
+output: html_notebook
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(sf)
+library(tidyverse)
+library(anchors)
+```
+
+# Split files using linux command line and read in first file of 100,000 lines (baa)
+```{r}
+system("less -n1 RawData/ebd_AU_relApr-2020.txt 2>&1", intern = FALSE, show.output.on.console = TRUE)
+baa<- read.delim("RawData/baa", header = TRUE, sep="\t")
+head(baa)
+view(baa)
+```
+# Filtering unwanted checklists
+## Protocol used for filtering:  
+Removed Incomplete checklists
+Removed checklists Duration.Minutes less than 10m and more than 5hrs
+Removed Checklists Effort.Distance more than 10km  
+# Selecting wanted columns
+Keeping Locality ID, Sampling event identifier, Lat and Long, Date
+# Selecting distinct rows
+Removing duplicates 
+
+
+```{r}
+baatrimmed<- baa %>% 
+  filter(ALL.SPECIES.REPORTED==1, EFFORT.DISTANCE.KM<10, DURATION.MINUTES<300, DURATION.MINUTES>10) %>% 
+  select(SAMPLING.EVENT.IDENTIFIER, LOCALITY.ID, LATITUDE, LONGITUDE, OBSERVATION.DATE) %>% 
+  distinct()
+```
+
+# Spacial Processing steps:
+
+## Read in fire shapefile
+```{r}
+fireshape<- st_read("National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211/National_Indicative_Aggregated_Fire_Extent_Dataset_v20200211.shp")
+```
+
+
+## Map of shapefile
+```{r}
+ggplot() + 
+  geom_sf(data = fireshape, size = 0.1, color = "black", fill = "black") + 
+  ggtitle("Fire Boundary Plot") + 
+  coord_sf()
+```
+## Convert ebird checklists to sf object with CRS code from fire shapefile
+Make the eBird data a sf object, then match CRS(Coordinate Reference System) with fire shapefile
+```{r}
+ebird_points <- st_as_sf(baatrimmed, coords=c("LONGITUDE", "LATITUDE"), crs=st_crs(fireshape))
+
+```
+## Make a map of the points using ggplot and geom_sf on the fire shapefile map
+```{r}
+ggplot() + 
+  geom_sf(data = fireshape, size = 0.1, color = "black", fill = "black") + 
+  geom_sf(data=ebird_points, size=0.5, color="green")+
+  ggtitle("Fire Boundary with listpoints") + 
+  coord_sf() +
+  
+```
+## add column for inside/outside using st_join
+```{r}
+pointsinout<-st_join(ebird_points, fireshape, join = st_within)
+View(pointsinout)
+count(pointsinout, Id)
+list(pointsinout$Id)
+
+#### Plotting didnt like the NAs or 0s so had to convert to 1s(Inside burnt zone) and 2s(Outside burnt zone)
+
+inout<- replace.value(pointsinout, "Id", from = 0, to = 1)
+inout[is.na(inout)] = 0
+inout1<- replace.value(inout, "Id", from = 0, to = 2)
+count(inout, Id)
+```
+
+
+## make a map with points coloured by inside/outside
+Blue=Fire extent, Red=Checklists outisde, Black=Checklists Inside
+```{r}
+MapbyInOut<- ggplot() + 
+  geom_sf(data = fireshape, size = 0.1, color = "blue", fill = "blue") + 
+  geom_sf(data=inout1, size=0.5, colour = inout1$Id)+
+  ggtitle("Points by In-Out") + 
+  coord_sf()
+print(MapbyInOut)
+```
+
+# write out as rds to a directory called processed_data
+```{r}
+dir.create("processed_data")
+saveRDS(MapbyInOut, "processed_data/MapbyInOut.rds")
+```
+
+
+#trying to test the loop outputs
+```{r}
+
+baain<- filter(baa, baa$in_fire == "True")
+baapoints <- st_as_sf(baa, coords=c("LONGITUDE", "LATITUDE"), crs=st_crs(fireshape))
+
+
+MapbyInOut2<- ggplot() + 
+  geom_sf(data = fireshape, size = 0.1, color = "blue", fill = "blue") + 
+  geom_sf(data=baapoints, size=0.5, colour= baapoints$in_fire)+
+  ggtitle("Points by In-Out") + 
+  coord_sf()
+print(MapbyInOut2)
+
+MapbyInOut2<- ggplot() + 
+  geom_sf(data = fireshape, size = 0.1, color = "blue", fill = "blue") + 
+  geom_sf(data=baainpoints, size=1, colour = 'Red')+
+  ggtitle("baa Points in") + 
+  coord_sf()
+print(MapbyInOut2)
+```
+
