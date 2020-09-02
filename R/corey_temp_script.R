@@ -1,31 +1,43 @@
 
 library(tidyverse)
 library(lubridate)
-setwd("data/Raw/rawspeciesdata")
+library(raster)
+#setwd("data/Raw/rawspeciesdata")
 
-read_dat_function <- function(file_name) {
-  dat <- readRDS(file_name)
-  dat$OBSERVATION.DATE<-ymd(dat$OBSERVATION.DATE)
-  return(dat)
-}
-
-files <- list.files()
-
-data <- lapply(files, read_dat_function)
-data_df <- do.call(rbind, data)
-data_df$LATITUDE<-as.numeric(data_df$LATITUDE)
-data_df<-filter(data_df,LATITUDE < -25)
-
-length(unique(data_df$SAMPLING.EVENT.IDENTIFIER))
-length(unique(data_df$COMMON.NAME))
-
-species_count <- data_df %>%
-  group_by(COMMON.NAME) %>%
-  summarize(N=n())
+# read_dat_function <- function(file_name) {
+#   dat <- readRDS(file_name)
+#   dat$OBSERVATION.DATE<-ymd(dat$OBSERVATION.DATE)
+#   return(dat)
+# }
+# 
+# files <- list.files()
+# 
+# data <- lapply(files, read_dat_function)
+# data_df <- do.call(rbind, data)
+# data_df$LATITUDE<-as.numeric(data_df$LATITUDE)
+# data_df<-filter(data_df,LATITUDE < -25)
+# 
+# length(unique(data_df$SAMPLING.EVENT.IDENTIFIER))
+# length(unique(data_df$COMMON.NAME))
+# 
+# species_count <- data_df %>%
+#   group_by(COMMON.NAME) %>%
+#   summarize(N=n())
 
 #setwd("..")
 
-process<-function(species_name,data_df=data_df){
+data_df_with_date<-read.csv("processed_data/ebird_data_with_fire_dates.csv") %>%
+  mutate(day_of_fire=as.Date(day_of_fire))
+
+fesm1000<-raster("Data/Raw/fesm_geotiff/fesm1000.tif")
+b<-SpatialPointsDataFrame(cbind(data_df_with_date$LONGITUDE,data_df_with_date$LATITUDE), 
+                          data_df_with_date, 
+                          match.ID = FALSE,
+                          proj4string = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
+bb<-spTransform(b,crs(fesm1000))
+data_df_with_date$sev<-extract(fesm1000,bb)
+
+process<-function(species_name,data_df=data_df_with_date){
   sl <- data_df %>%
     dplyr::filter(COMMON.NAME == species_name) %>%
     mutate(present=1)
@@ -37,7 +49,7 @@ process<-function(species_name,data_df=data_df){
   lists_without <- data_df %>%
     dplyr::filter(! SAMPLING.EVENT.IDENTIFIER %in% sl_lists$SAMPLING.EVENT.IDENTIFIER) %>%
     dplyr::select(SAMPLING.EVENT.IDENTIFIER,OBSERVATION.DATE, DURATION.MINUTES, LATITUDE, LONGITUDE,
-                  EFFORT.DISTANCE.KM, COUNTY.CODE, OBSERVER.ID,day_of_fire) %>% 
+                  EFFORT.DISTANCE.KM, COUNTY.CODE, OBSERVER.ID,day_of_fire,sev) %>% 
     distinct() %>%
     mutate(present=0)
   
@@ -47,9 +59,10 @@ process<-function(species_name,data_df=data_df){
     mutate(DURATION.MINUTES=as.numeric(DURATION.MINUTES),
            EFFORT.DISTANCE.KM=as.numeric(EFFORT.DISTANCE.KM)) %>%
     mutate(MONTH=month(OBSERVATION.DATE)) %>%
+    mutate(OBSERVATION.DATE=as.Date(OBSERVATION.DATE)) %>%
     mutate(before.after=ifelse(OBSERVATION.DATE>day_of_fire, "After", "Before"))
   
-  mod <- mgcv::gam(present ~ before.after + s(DURATION.MINUTES) +
+  mod <- mgcv::gam(present ~ before.after + s(DURATION.MINUTES) + s(LONGITUDE, LATITUDE) +
                      s(EFFORT.DISTANCE.KM) + s(MONTH, bs="cc", k=11), 
                    family="binomial", data=final_sl_dat)
   
@@ -61,7 +74,7 @@ process<-function(species_name,data_df=data_df){
   return(out)
 }
 
-data_df_with_date<-read.csv("processed_data/ebird_data_with_fire_dates.csv")
+
 
 data_df_with_date %>%
   group_by(COMMON.NAME) %>%
