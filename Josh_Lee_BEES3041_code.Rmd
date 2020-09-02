@@ -343,6 +343,16 @@ all_files <- list.files("Output/data/model_objects/")
   bird_response_df <- map_df(all_files, extractingcoeffse_function)
 ```
 
+# removing waterbirds
+```{r}
+write.csv(bird_response_df, "Data/Processed/bird_responses.csv")
+brd_resp<- read.csv("Data/Processed/bird_responses_1.csv")
+bird_respones_new <- brd_resp %>% 
+  dplyr::filter(WB == 0) %>% 
+  dplyr::select(X:species)
+
+```
+
 # Read in trait data obtained from (Garnett et al., 2015)
 T Garnett, Stephen; E Duursma, Daisy; Ehmke, Glenn; Guay, Patrick-Jean; Stewart, Alistair; K Szabo, Judit; et al. (2015): Australian Bird Data Version 1.0 (2015). figshare. Collection. https://doi.org/10.6084/m9.figshare.1499292
 
@@ -352,11 +362,11 @@ traits<- read.csv("Data/Raw/trait_data.csv")
 
 # Select only traits of interest, and renaming species where there were discrepancies between the two dfs
 ```{r}
-fire_coefs<- rename(bird_response_df, species_name = species)
+fire_coefs<- rename(bird_respones_new, species_name = species)
 
 
 foodtraits<- traits %>% 
-  select("X3_Taxon_common_name_2", "X99_Body_mass_average_8", "X163_Food_Fruit_10":"X173_Food_fish_or_invertebrates_Inland_waters_10", "X115_Feeding_habitat_Terrestrial_Arid_shrubland_9":"X145_Feeding_habitat_Urban_landscapes_9", "X193_National_movement_local_dispersal_13":"X197_National_movement_Irruptive_13") %>% 
+  dplyr::select("X3_Taxon_common_name_2", "X99_Body_mass_average_8", "X163_Food_Fruit_10":"X173_Food_fish_or_invertebrates_Inland_waters_10", "X115_Feeding_habitat_Terrestrial_Arid_shrubland_9":"X145_Feeding_habitat_Urban_landscapes_9", "X193_National_movement_local_dispersal_13":"X197_National_movement_Irruptive_13", "X126_Feeding_habitat_Inland_waters_Rivers_and_streams_9", "X127_Feeding_habitat_Inland_waters_Deep_open_water_9":"X135_Feeding_habitat_Coastal_Mangrove_floor_9") %>% 
   rename(species_name = "X3_Taxon_common_name_2") %>% 
   mutate(species_name=gsub(" ", "_", species_name)) 
 
@@ -384,12 +394,7 @@ traitsfin <- foodtraits %>%
 ```{r}
 values<- traitsfin %>% 
   filter(Term == "before.afterBefore") %>% 
-  mutate(X99_Body_mass_average_8 = as.numeric(X99_Body_mass_average_8)) %>%
-  as.factor("X193_National_movement_local_dispersal_13",
-               "X194_National_movement_Partial_migrant_13",
-               "X195_National_movement_Total_migrant_13",
-               "X196_National_movement_Nomadic_or_opportunistic_13",
-               "X197_National_movement_Irruptive_13")
+  mutate(X99_Body_mass_average_8 = as.numeric(X99_Body_mass_average_8))
 
 tot<- as.integer(values$X193_National_movement_local_dispersal_13,
           values$X194_National_movement_Partial_migrant_13,
@@ -443,22 +448,17 @@ X141_Feeding_habitat_Marine_Temperate_inshore_9 +
 X142_Feeding_habitat_Marine_Warm_inshore_9 +                                      
 X143_Feeding_habitat_Other_non.Australian_habitat_9 +                             
 X144_Feeding_habitat_Agricultural_landscapes_9 +
-X145_Feeding_habitat_Urban_landscapes_9)%>% 
-  mutate(movetot = X193_National_movement_local_dispersal_13 +
-           X194_National_movement_Partial_migrant_13 +
-           X195_National_movement_Total_migrant_13 +
-           X196_National_movement_Nomadic_or_opportunistic_13 +
-           X197_National_movement_Irruptive_13)
+X145_Feeding_habitat_Urban_landscapes_9)
 ```
 
 # Running linear models between fire response and food specialism, habitat specialism, size and sedentism.
 ## Place results into final data frame
 ```{r}
 #### models
-modfood<-lm(Estimate ~ foodspec, data = valuesfin,weights = 1/`Std. Error`)
-modhabitat<-lm(Estimate ~ habitatspec, data = valuesfin,weights = 1/`Std. Error`)
-modsize<-lm(Estimate ~ X99_Body_mass_average_8, data = valuesfin,weights = 1/`Std. Error`)
-modmobility<-lm(Estimate ~ X193_National_movement_local_dispersal_13, data = valuesfin,weights = 1/`Std. Error`)
+modfood<-lm(Estimate ~ foodspec, data = valuesfin,weights = 1/`Std..Error`)
+modhabitat<-lm(Estimate ~ habitatspec, data = valuesfin,weights = 1/`Std..Error`)
+modsize<-lm(Estimate ~ X99_Body_mass_average_8, data = valuesfin,weights = 1/`Std..Error`)
+modmobility<-lm(Estimate ~ X193_National_movement_local_dispersal_13, data = valuesfin,weights = 1/`Std..Error`)
 
 summary(modfood)
 summary(modhabitat)
@@ -474,6 +474,7 @@ outputs<- bind_rows(habitat, food, size, sedentism)
 outputs$test <- c("Habitat Specialism", "Food Specialism", "Body Size", "Sedentism")
 
 write.csv(outputs, "Output/results.csv")
+results <- read.csv("Output/results.csv")
 ```
 
 # Plotting models to visualise results
