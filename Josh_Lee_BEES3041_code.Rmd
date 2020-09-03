@@ -345,11 +345,15 @@ all_files <- list.files("Output/data/model_objects/")
 
 # removing waterbirds
 ```{r}
-write.csv(bird_response_df, "Data/Processed/bird_responses.csv")
-brd_resp<- read.csv("Data/Processed/bird_responses_1.csv")
-bird_respones_new <- brd_resp %>% 
-  dplyr::filter(WB == 0) %>% 
-  dplyr::select(X:species)
+bird_respones_new <- dplyr::filter(bird_response_df, !(bird_response_df$species == "Australian_Pelican" | 
+                                                       bird_response_df$species == "Chestnut_Teal" |
+                                                       bird_response_df$species == "Great_Cormorant"|
+                                                       bird_response_df$species == "Little_Black_Cormorant"|
+                                                       bird_response_df$species == "Little_Pied_Cormorant"|
+                                                       bird_response_df$species == "Maned_Duck"|
+                                                       bird_response_df$species == "Pacific_Black_Duck"|
+                                                       bird_response_df$species == "Silver_Gull"|
+                                                       bird_response_df$species == "White-faced_Heron"))
 
 ```
 
@@ -455,10 +459,10 @@ X145_Feeding_habitat_Urban_landscapes_9)
 ## Place results into final data frame
 ```{r}
 #### models
-modfood<-lm(Estimate ~ foodspec, data = valuesfin,weights = 1/`Std..Error`)
-modhabitat<-lm(Estimate ~ habitatspec, data = valuesfin,weights = 1/`Std..Error`)
-modsize<-lm(Estimate ~ X99_Body_mass_average_8, data = valuesfin,weights = 1/`Std..Error`)
-modmobility<-lm(Estimate ~ X193_National_movement_local_dispersal_13, data = valuesfin,weights = 1/`Std..Error`)
+modfood<-lm(Estimate ~ foodspec, data = valuesfin,weights = 1/`Std. Error`)
+modhabitat<-lm(Estimate ~ habitatspec, data = valuesfin,weights = 1/`Std. Error`)
+modsize<-lm(Estimate ~ X99_Body_mass_average_8, data = valuesfin,weights = 1/`Std. Error`)
+modmobility<-lm(Estimate ~ X193_National_movement_local_dispersal_13, data = valuesfin,weights = 1/`Std. Error`)
 
 summary(modfood)
 summary(modhabitat)
@@ -485,7 +489,7 @@ df<- valuesfin %>%
 
 ggplot(modfood, aes(foodspec, Estimate*-1)) + geom_point() + theme_bw() + xlab("Number of Feeding Guilds") + ylab("Fire Response")
 ggsave("Output/figures/foodmodel.PNG")
-ggplot(modsize, aes(X99_Body_mass_average_8, Estimate*-1)) + geom_point()+ scale_x_log10()+ theme_bw() + xlab("Body Mass") + ylab("Fire Response")+ geom_smooth(method='lm')
+ggplot(modsize, aes(X99_Body_mass_average_8, Estimate*-1)) + geom_point()+ scale_x_log10()+ theme_bw() + xlab("Body Mass") + ylab("Fire Response")
 ggsave("Output/figures/sizemodel.PNG")
 ggplot(modhabitat, aes(habitatspec, Estimate*-1)) + geom_point()+ theme_bw() + xlab("Number of Habitats") + ylab("Fire Response")
 ggsave("Output/figures/habitatmodel.PNG")
