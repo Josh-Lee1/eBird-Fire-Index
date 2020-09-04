@@ -400,11 +400,12 @@ values<- traitsfin %>%
   filter(Term == "before.afterBefore") %>% 
   mutate(X99_Body_mass_average_8 = as.numeric(X99_Body_mass_average_8))
 
-tot<- as.integer(values$X193_National_movement_local_dispersal_13,
-          values$X194_National_movement_Partial_migrant_13,
-          values$X195_National_movement_Total_migrant_13,
-          values$X196_National_movement_Nomadic_or_opportunistic_13,
-          values$X197_National_movement_Irruptive_13)
+values$X193_National_movement_local_dispersal_13 <- as.integer(values$X193_National_movement_local_dispersal_13)
+values$X194_National_movement_Partial_migrant_13 <- as.integer(values$X194_National_movement_Partial_migrant_13)
+values$X195_National_movement_Total_migrant_13 <- as.integer(values$X195_National_movement_Total_migrant_13)
+values$X196_National_movement_Nomadic_or_opportunistic_13 <- as.integer(values$X196_National_movement_Nomadic_or_opportunistic_13)
+values$X197_National_movement_Irruptive_13 <- as.integer(values$X197_National_movement_Irruptive_13)
+
 ```
 
 # Calculation of habitat specialism and feeding specialism
@@ -452,7 +453,8 @@ X141_Feeding_habitat_Marine_Temperate_inshore_9 +
 X142_Feeding_habitat_Marine_Warm_inshore_9 +                                      
 X143_Feeding_habitat_Other_non.Australian_habitat_9 +                             
 X144_Feeding_habitat_Agricultural_landscapes_9 +
-X145_Feeding_habitat_Urban_landscapes_9)
+X145_Feeding_habitat_Urban_landscapes_9) %>% 
+  mutate()
 ```
 
 # Running linear models between fire response and food specialism, habitat specialism, size and sedentism.

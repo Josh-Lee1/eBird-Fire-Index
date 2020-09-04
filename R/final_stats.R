@@ -18,7 +18,7 @@ drop %>%
                 color = "grey", size=1)
 
   
-  responses<- bird_response_df %>% 
+  responses<- bird_respones_new %>% 
     filter(Term == "before.afterBefore") %>% 
     rename(SE = 'Std. Error') %>% 
     mutate(Estimate, value = Estimate*-1)
