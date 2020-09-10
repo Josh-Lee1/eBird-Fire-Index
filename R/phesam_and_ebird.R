@@ -58,15 +58,31 @@ bird_response_df %>%
 
 write_csv(oo,"processed_data/severity_data_and_traits.csv")
 
+
+
 library(readr)
 library(plotly)
-oo<-read_csv("processed_data/severity_data_and_traits.csv")
-z<-ggplot(oo,aes(x=median.sev,y=-1*Estimate,label=COMMON.NAME,))+
+bird_response_df<-read_csv("processed_data/severity_data_and_traits.csv")
+
+bird_respones_new <- dplyr::filter(oo, !(bird_response_df$species == "Australian_Pelican" | 
+                                                         bird_response_df$species == "Chestnut_Teal" |
+                                                         bird_response_df$species == "Great_Cormorant"|
+                                                         bird_response_df$species == "Little_Black_Cormorant"|
+                                                         bird_response_df$species == "Little_Pied_Cormorant"|
+                                                         bird_response_df$species == "Maned_Duck"|
+                                                         bird_response_df$species == "Pacific_Black_Duck"|
+                                                         bird_response_df$species == "Silver_Gull"|
+                                                         bird_response_df$species == "White-faced_Heron"))
+
+
+z<-ggplot(bird_respones_new,aes(x=median.sev,y=-1*Estimate,label=COMMON.NAME,))+
   geom_point(aes(col=feeding_specialisation))+geom_smooth(method="lm")+ylab("modeled response to fire")+
   geom_hline(yintercept = 0,linetype="dashed")+xlab("Median fire severity in post-fire observations")+
   theme_classic()
+ggsave("Output/figures/severity_response.pdf")
+
 
 ggplotly(z)
 
-
+summary(lm(Estimate~median.sev,data=bird_respones_new))
 
