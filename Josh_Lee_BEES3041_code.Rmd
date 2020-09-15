@@ -454,7 +454,13 @@ X142_Feeding_habitat_Marine_Warm_inshore_9 +
 X143_Feeding_habitat_Other_non.Australian_habitat_9 +                             
 X144_Feeding_habitat_Agricultural_landscapes_9 +
 X145_Feeding_habitat_Urban_landscapes_9) %>% 
-  mutate()
+  mutate(movetotal = X193_National_movement_local_dispersal_13 +
+           X194_National_movement_Partial_migrant_13 +
+           X195_National_movement_Total_migrant_13 +
+           X196_National_movement_Nomadic_or_opportunistic_13 + 
+           X197_National_movement_Irruptive_13) %>% 
+  mutate(localonly = movetotal==X193_National_movement_local_dispersal_13) %>% 
+  mutate(localdisperse = X193_National_movement_local_dispersal_13 == 1)
 ```
 
 # Running linear models between fire response and food specialism, habitat specialism, size and sedentism.
@@ -464,20 +470,24 @@ X145_Feeding_habitat_Urban_landscapes_9) %>%
 modfood<-lm(Estimate ~ foodspec, data = valuesfin,weights = 1/`Std. Error`)
 modhabitat<-lm(Estimate ~ habitatspec, data = valuesfin,weights = 1/`Std. Error`)
 modsize<-lm(Estimate ~ X99_Body_mass_average_8, data = valuesfin,weights = 1/`Std. Error`)
-modmobility<-lm(Estimate ~ X193_National_movement_local_dispersal_13, data = valuesfin,weights = 1/`Std. Error`)
+modmobility<-lm(Estimate ~ localdisperse, data = valuesfin,weights = 1/`Std. Error`)
+modlocalonly<-lm(Estimate ~ localonly, data = valuesfin,weights = 1/`Std. Error`)
 
 summary(modfood)
 summary(modhabitat)
 summary(modsize)
 summary(modmobility)
+summary(modlocalonly)
+
 
 food <- broom::glance(modfood)
 habitat<- broom::glance(modhabitat)
 size<- broom::glance(modsize)
 sedentism<- broom::glance(modmobility)
+localonly<- broom::glance(modlocalonly)
 
-outputs<- bind_rows(habitat, food, size, sedentism)
-outputs$test <- c("Habitat Specialism", "Food Specialism", "Body Size", "Sedentism")
+outputs<- bind_rows(habitat, food, size, sedentism, localonly)
+outputs$test <- c("Habitat Specialism", "Food Specialism", "Body Size", "Sedentism", "Obligate Sedentism")
 
 write.csv(outputs, "Output/results.csv")
 results <- read.csv("Output/results.csv")
@@ -495,8 +505,9 @@ ggplot(modsize, aes(X99_Body_mass_average_8, Estimate*-1)) + geom_point()+ scale
 ggsave("Output/figures/sizemodel.PNG")
 ggplot(modhabitat, aes(habitatspec, Estimate*-1)) + geom_point()+ theme_bw() + xlab("Number of Habitats") + ylab("Fire Response")
 ggsave("Output/figures/habitatmodel.PNG")
-ggplot(modmobility, aes(X193_National_movement_local_dispersal_13, Estimate*-1)) + geom_point()+ theme_bw() + xlab("Sedentism") + ylab("Fire Response")
+ggplot(modmobility, aes(localdisperse, Estimate*-1)) + geom_point()+ theme_bw() + xlab("Locally Dispersing") + ylab("Fire Response")
 ggsave("Output/figures/mobilitymodel.PNG")
-
+ggplot(modlocalonly, aes(localonly, Estimate*-1)) + geom_point() + theme_bw() + xlab("Obligate Sedentism") + ylab("Fire Response")
+ggsave("Output/figures/Osed.PNG")
 ```
 

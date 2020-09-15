@@ -25,15 +25,17 @@ drop %>%
     
   
          
-  responses %>%
+  Fireresponseplot<- responses %>%
     mutate(species = fct_reorder(species, value)) %>%
     ggplot(aes(x=species, y=value)) +
     geom_point() +
-    ylab("Change in detection after fire") +
+    ylab("Modelled Response to Fire") +
     geom_errorbar(aes(ymin = value-SE, ymax = value+SE)) +
     coord_flip() +
     xlab("") +
     theme_bw() + 
     geom_hline(yintercept = 0, linetype="dashed", 
                color = "grey", size=1)
+
+  ggsave(Fireresponseplot, "Output/figures/fireresponses.png")  
   

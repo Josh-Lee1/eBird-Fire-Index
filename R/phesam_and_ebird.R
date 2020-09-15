@@ -76,7 +76,7 @@ bird_respones_new <- dplyr::filter(oo, !(bird_response_df$species == "Australian
 
 
 z<-ggplot(bird_respones_new,aes(x=median.sev,y=-1*Estimate,label=COMMON.NAME,))+
-  geom_point(aes(col=feeding_specialisation))+geom_smooth(method="lm")+ylab("modeled response to fire")+
+  geom_point(aes(col=feeding_specialisation))+geom_smooth(method="lm")+ylab("Modelled Response to Fire")+
   geom_hline(yintercept = 0,linetype="dashed")+xlab("Median fire severity in post-fire observations")+
   theme_classic()
 ggsave("Output/figures/severity_response.pdf")
