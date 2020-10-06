@@ -21,3 +21,5 @@ saveWidget(widget=z_p, file="interactive_figure.html")
 setwd("..")
 
 ggplotly(z)
+
+summary(lm(median.sev ~ Estimate, oo))

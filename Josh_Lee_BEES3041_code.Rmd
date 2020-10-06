@@ -15,6 +15,7 @@ library(tidyverse)
 library(lubridate)
 library(rnaturalearth)
 library(mgcv)
+library(patchwork)
 
 ```
 
@@ -486,8 +487,8 @@ size<- broom::glance(modsize)
 sedentism<- broom::glance(modmobility)
 localonly<- broom::glance(modlocalonly)
 
-outputs<- bind_rows(habitat, food, size, sedentism, localonly)
-outputs$test <- c("Habitat Specialism", "Food Specialism", "Body Size", "Sedentism", "Obligate Sedentism")
+outputs<- bind_rows(habitat, food, size, localonly)
+outputs$test <- c("Habitat Specialism", "Food Specialism", "Body Size", "Obligate Sedentism")
 
 write.csv(outputs, "Output/results.csv")
 results <- read.csv("Output/results.csv")
@@ -499,15 +500,20 @@ results <- read.csv("Output/results.csv")
 df<- valuesfin %>% 
   mutate(Estimate, value = Estimate*-1)
 
-ggplot(modfood, aes(foodspec, Estimate*-1)) + geom_point() + theme_bw() + xlab("Number of Feeding Guilds") + ylab("Fire Response")
+food <- ggplot(modfood, aes(foodspec, Estimate*-1)) + geom_point() + theme_bw() + xlab("Number of Feeding Guilds") + ylab("Modelled Response to Fire") + ggtitle("A")
 ggsave("Output/figures/foodmodel.PNG")
-ggplot(modsize, aes(X99_Body_mass_average_8, Estimate*-1)) + geom_point()+ scale_x_log10()+ theme_bw() + xlab("Body Mass") + ylab("Fire Response")
+size <- ggplot(modsize, aes(X99_Body_mass_average_8, Estimate*-1)) + geom_point()+ scale_x_log10()+ theme_bw() + xlab("Body Mass (grams)") + ylab("Modelled Response to Fire") + ggtitle("D")
 ggsave("Output/figures/sizemodel.PNG")
-ggplot(modhabitat, aes(habitatspec, Estimate*-1)) + geom_point()+ theme_bw() + xlab("Number of Habitats") + ylab("Fire Response")
+hab <- ggplot(modhabitat, aes(habitatspec, Estimate*-1)) + geom_point()+ theme_bw() + xlab("Number of Habitats") + ylab("Modelled Response to Fire") + ggtitle("B")
 ggsave("Output/figures/habitatmodel.PNG")
-ggplot(modmobility, aes(localdisperse, Estimate*-1)) + geom_point()+ theme_bw() + xlab("Locally Dispersing") + ylab("Fire Response")
-ggsave("Output/figures/mobilitymodel.PNG")
-ggplot(modlocalonly, aes(localonly, Estimate*-1)) + geom_point() + theme_bw() + xlab("Obligate Sedentism") + ylab("Fire Response")
+#mob <- ggplot(modmobility, aes(localdisperse, Estimate*-1)) + geom_point()+ theme_bw() + xlab("Locally #Dispersing") + ylab("Modelled Response to Fire")
+#ggsave("Output/figures/mobilitymodel.PNG")
+loc <- ggplot(modlocalonly, aes(localonly, Estimate*-1)) + geom_point() + theme_bw() + xlab("Sedentary Only") + ylab("Modelled Response to Fire") + ggtitle("C")
 ggsave("Output/figures/Osed.PNG")
+```
+```{r}
+library(patchwork)
+patch<- (food | hab)/(loc | size)
+print(patch)
 ```
 
