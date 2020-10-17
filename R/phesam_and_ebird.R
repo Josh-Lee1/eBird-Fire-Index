@@ -47,7 +47,7 @@ valuesfin$foodspec
 
 
 vf<-valuesfin %>%
-  mutate(feeding_specialisation=ifelse(foodspec>1,"generalist","specialist"))
+  mutate(feeding_specialisation=ifelse(foodspec>1,"Generalist","Specialist"))
 
 bird_response_df %>%
   filter(Term=="before.afterBefore") %>%
@@ -73,6 +73,8 @@ bird_respones_new <- dplyr::filter(oo, !(bird_response_df$species == "Australian
                                                          bird_response_df$species == "Pacific_Black_Duck"|
                                                          bird_response_df$species == "Silver_Gull"|
                                                          bird_response_df$species == "White-faced_Heron"))
+
+write_csv(bird_respones_new,"processed_data/severity_data_and_traits1.csv")
 
 
 z<-ggplot(bird_respones_new,aes(x=median.sev,y=-1*Estimate,label=COMMON.NAME,))+
