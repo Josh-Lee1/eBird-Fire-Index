@@ -8,9 +8,9 @@ library(readr)
 
 oo<-read_csv("processed_data/severity_data_and_traits1.csv")
 z<-ggplot(oo,aes(x=median.sev,y=-1*Estimate,label=COMMON.NAME,))+
-  geom_point(aes(col=feeding_specialisation))+geom_smooth(method="lm")+ylab("Modelled Response to Fire")+
+  geom_point(aes(col=feeding_specialisation))+ylab("Modelled Response to Fire")+
   geom_hline(yintercept = 0,linetype="dashed")+xlab("Median fire severity in post-fire observations")+
-  theme_classic()
+  theme_classic()+scale_colour_discrete("Feeding Specialisation")
 
 z_bits <- ggplot_build(z)$oo
 
