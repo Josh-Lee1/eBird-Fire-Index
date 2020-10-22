@@ -21,13 +21,16 @@ drop %>%
   responses<- bird_respones_new %>% 
     filter(Term == "before.afterBefore") %>% 
     rename(SE = 'Std. Error') %>% 
-    mutate(Estimate, value = Estimate*-1)
+    mutate(Estimate, value = Estimate*-1) %>% 
+    mutate(Estimate, Eplusse = Estimate+SE) %>% 
+    mutate(Estimate, Eminuse = Estimate-SE) 
     
+response_new<- read.csv("Data/Processed/df.csv")
   
          
-  Fireresponseplot<- responses %>%
+  Fireresponseplot<- response_new %>%
     mutate(species = fct_reorder(species, value)) %>%
-    ggplot(aes(x=species, y=value)) +
+    ggplot(aes(x=species, y=value, colour = response)) +
     geom_point() +
     ylab("Modelled Response to Fire") +
     geom_errorbar(aes(ymin = value-SE, ymax = value+SE)) +
@@ -35,7 +38,12 @@ drop %>%
     xlab("") +
     theme_bw() + 
     geom_hline(yintercept = 0, linetype="dashed", 
-               color = "grey", size=1)
+               color = "grey", size=1) +
+    theme(legend.position = c(0.8, 0.2)) +
+    theme(legend.title = element_blank()) +
+    scale_color_brewer(palette = "Set1")
 
+  plot(Fireresponseplot)
+  
   
   ggsave(Fireresponseplot, "Output/figures/fireresponses.png")

@@ -2460,16 +2460,134 @@ X145_Feeding_habitat_Urban_landscapes_9) %&gt;%
 <h2>Place results into final data frame</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub3V0cHV0cyR0ZXN0IDwtIGMoXCJIYWJpdGF0IFNwZWNpYWxpc21cIiwgXCJGb29kIFNwZWNpYWxpc21cIiwgXCJCb2R5IFNpemVcIiwgXCJPYmxpZ2F0ZSBTZWRlbnRpc21cIilcblxuYGBgIn0= -->
-<pre class="r"><code>outputs$test &lt;- c(&quot;Habitat Specialism&quot;, &quot;Food Specialism&quot;, &quot;Body Size&quot;, &quot;Obligate Sedentism&quot;)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyMjIyBtb2RlbHNcbm1vZGZvb2Q8LWxtKEVzdGltYXRlIH4gZm9vZHNwZWMsIGRhdGEgPSB2YWx1ZXNmaW4sd2VpZ2h0cyA9IDEvYFN0ZC4gRXJyb3JgKVxubW9kaGFiaXRhdDwtbG0oRXN0aW1hdGUgfiBoYWJpdGF0c3BlYywgZGF0YSA9IHZhbHVlc2Zpbix3ZWlnaHRzID0gMS9gU3RkLiBFcnJvcmApXG5tb2RzaXplPC1sbShFc3RpbWF0ZSB+IFg5OV9Cb2R5X21hc3NfYXZlcmFnZV84LCBkYXRhID0gdmFsdWVzZmluLHdlaWdodHMgPSAxL2BTdGQuIEVycm9yYClcbm1vZG1vYmlsaXR5PC1sbShFc3RpbWF0ZSB+IGxvY2FsZGlzcGVyc2UsIGRhdGEgPSB2YWx1ZXNmaW4sd2VpZ2h0cyA9IDEvYFN0ZC4gRXJyb3JgKVxubW9kbG9jYWxvbmx5PC1sbShFc3RpbWF0ZSB+IGxvY2Fsb25seSwgZGF0YSA9IHZhbHVlc2Zpbix3ZWlnaHRzID0gMS9gU3RkLiBFcnJvcmApXG5cbnN1bW1hcnkobW9kZm9vZClcbmBgYCJ9 -->
+<pre class="r"><code>#### models
+modfood&lt;-lm(Estimate ~ foodspec, data = valuesfin,weights = 1/`Std. Error`)
+modhabitat&lt;-lm(Estimate ~ habitatspec, data = valuesfin,weights = 1/`Std. Error`)
+modsize&lt;-lm(Estimate ~ X99_Body_mass_average_8, data = valuesfin,weights = 1/`Std. Error`)
+modmobility&lt;-lm(Estimate ~ localdisperse, data = valuesfin,weights = 1/`Std. Error`)
+modlocalonly&lt;-lm(Estimate ~ localonly, data = valuesfin,weights = 1/`Std. Error`)
+
+summary(modfood)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3I6IEFzc2lnbmVkIGRhdGEgYGMoXCJIYWJpdGF0IFNwZWNpYWxpc21cIiwgXCJGb29kIFNwZWNpYWxpc21cIiwgXCJCb2R5IFNpemVcIiwgXCJPYmxpZ2F0ZSBTZWRlbnRpc21cIilgIG11c3QgYmUgY29tcGF0aWJsZSB3aXRoIGV4aXN0aW5nIGRhdGEuXG5cdTAwMWJbMzFteFx1MDAxYlszOW0gRXhpc3RpbmcgZGF0YSBoYXMgNSByb3dzLlxuXHUwMDFiWzMxbXhcdTAwMWJbMzltIEFzc2lnbmVkIGRhdGEgaGFzIDQgcm93cy5cblx1MDAxYlszNG1pXHUwMDFiWzM5bSBPbmx5IHZlY3RvcnMgb2Ygc2l6ZSAxIGFyZSByZWN5Y2xlZC5cbiJ9 -->
-<pre><code>Error: Assigned data `c(&quot;Habitat Specialism&quot;, &quot;Food Specialism&quot;, &quot;Body Size&quot;, &quot;Obligate Sedentism&quot;)` must be compatible with existing data.
-[31mx[39m Existing data has 5 rows.
-[31mx[39m Assigned data has 4 rows.
-[34mi[39m Only vectors of size 1 are recycled.</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubG0oZm9ybXVsYSA9IEVzdGltYXRlIH4gZm9vZHNwZWMsIGRhdGEgPSB2YWx1ZXNmaW4sIHdlaWdodHMgPSAxL2BTdGQuIEVycm9yYClcblxuV2VpZ2h0ZWQgUmVzaWR1YWxzOlxuICAgICBNaW4gICAgICAgMVEgICBNZWRpYW4gICAgICAgM1EgICAgICBNYXggXG4tMi44ODkzMyAtMC42NTExNCAgMC4wNTY5NSAgMC43MzU4NSAgMS45NDU5MSBcblxuQ29lZmZpY2llbnRzOlxuICAgICAgICAgICAgRXN0aW1hdGUgU3RkLiBFcnJvciB0IHZhbHVlIFByKD58dHwpICBcbihJbnRlcmNlcHQpICAwLjE5ODQ3ICAgIDAuMTAzNTYgICAxLjkxNyAgIDAuMDU5MiAuXG5mb29kc3BlYyAgICAtMC4xMDc4OSAgICAwLjA0MTE2ICAtMi42MjEgICAwLjAxMDYgKlxuLS0tXG5TaWduaWYuIGNvZGVzOiAgMCDigJgqKirigJkgMC4wMDEg4oCYKirigJkgMC4wMSDigJgq4oCZIDAuMDUg4oCYLuKAmSAwLjEg4oCYIOKAmSAxXG5cblJlc2lkdWFsIHN0YW5kYXJkIGVycm9yOiAwLjk5NTQgb24gNzQgZGVncmVlcyBvZiBmcmVlZG9tXG5NdWx0aXBsZSBSLXNxdWFyZWQ6ICAwLjA4NDk1LFx0QWRqdXN0ZWQgUi1zcXVhcmVkOiAgMC4wNzI1OCBcbkYtc3RhdGlzdGljOiAgNi44NyBvbiAxIGFuZCA3NCBERiwgIHAtdmFsdWU6IDAuMDEwNjNcbiJ9 -->
+<pre><code>
+Call:
+lm(formula = Estimate ~ foodspec, data = valuesfin, weights = 1/`Std. Error`)
+
+Weighted Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.88933 -0.65114  0.05695  0.73585  1.94591 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)  0.19847    0.10356   1.917   0.0592 .
+foodspec    -0.10789    0.04116  -2.621   0.0106 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.9954 on 74 degrees of freedom
+Multiple R-squared:  0.08495,   Adjusted R-squared:  0.07258 
+F-statistic:  6.87 on 1 and 74 DF,  p-value: 0.01063</code></pre>
 <!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShtb2RoYWJpdGF0KVxuYGBgIn0= -->
+<pre class="r"><code>summary(modhabitat)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubG0oZm9ybXVsYSA9IEVzdGltYXRlIH4gaGFiaXRhdHNwZWMsIGRhdGEgPSB2YWx1ZXNmaW4sIHdlaWdodHMgPSAxL2BTdGQuIEVycm9yYClcblxuV2VpZ2h0ZWQgUmVzaWR1YWxzOlxuICAgIE1pbiAgICAgIDFRICBNZWRpYW4gICAgICAzUSAgICAgTWF4IFxuLTIuNzY0MyAtMC43OTI3ICAwLjE5NzggIDAuNzY3MyAgMS44ODgwIFxuXG5Db2VmZmljaWVudHM6XG4gICAgICAgICAgICBFc3RpbWF0ZSBTdGQuIEVycm9yIHQgdmFsdWUgUHIoPnx0fClcbihJbnRlcmNlcHQpICAwLjEyNDI4ICAgIDAuMTIxMDggICAxLjAyNiAgICAwLjMwOFxuaGFiaXRhdHNwZWMgLTAuMDIxMTYgICAgMC4wMTM5NyAgLTEuNTE1ICAgIDAuMTM0XG5cblJlc2lkdWFsIHN0YW5kYXJkIGVycm9yOiAxLjAyNSBvbiA3NCBkZWdyZWVzIG9mIGZyZWVkb21cbk11bHRpcGxlIFItc3F1YXJlZDogIDAuMDMwMSxcdEFkanVzdGVkIFItc3F1YXJlZDogIDAuMDE2OTkgXG5GLXN0YXRpc3RpYzogMi4yOTcgb24gMSBhbmQgNzQgREYsICBwLXZhbHVlOiAwLjEzMzlcbiJ9 -->
+<pre><code>
+Call:
+lm(formula = Estimate ~ habitatspec, data = valuesfin, weights = 1/`Std. Error`)
+
+Weighted Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.7643 -0.7927  0.1978  0.7673  1.8880 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)  0.12428    0.12108   1.026    0.308
+habitatspec -0.02116    0.01397  -1.515    0.134
+
+Residual standard error: 1.025 on 74 degrees of freedom
+Multiple R-squared:  0.0301,    Adjusted R-squared:  0.01699 
+F-statistic: 2.297 on 1 and 74 DF,  p-value: 0.1339</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShtb2RzaXplKVxuYGBgIn0= -->
+<pre class="r"><code>summary(modsize)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubG0oZm9ybXVsYSA9IEVzdGltYXRlIH4gWDk5X0JvZHlfbWFzc19hdmVyYWdlXzgsIGRhdGEgPSB2YWx1ZXNmaW4sIFxuICAgIHdlaWdodHMgPSAxL2BTdGQuIEVycm9yYClcblxuV2VpZ2h0ZWQgUmVzaWR1YWxzOlxuICAgIE1pbiAgICAgIDFRICBNZWRpYW4gICAgICAzUSAgICAgTWF4IFxuLTIuODIxMCAtMC42NjAxICAwLjEzMTQgIDAuNzY3NSAgMS45MjgwIFxuXG5Db2VmZmljaWVudHM6XG4gICAgICAgICAgICAgICAgICAgICAgICAgIEVzdGltYXRlIFN0ZC4gRXJyb3IgdCB2YWx1ZSBQcig+fHR8KVxuKEludGVyY2VwdCkgICAgICAgICAgICAgLTAuMDIwODgxMyAgMC4wNTE5MzI1ICAtMC40MDIgICAgMC42ODlcblg5OV9Cb2R5X21hc3NfYXZlcmFnZV84IC0wLjAwMDEyMDYgIDAuMDAwMTAzNCAgLTEuMTY2ICAgIDAuMjQ4XG5cblJlc2lkdWFsIHN0YW5kYXJkIGVycm9yOiAxLjAzMSBvbiA3NCBkZWdyZWVzIG9mIGZyZWVkb21cbk11bHRpcGxlIFItc3F1YXJlZDogIDAuMDE4MDMsXHRBZGp1c3RlZCBSLXNxdWFyZWQ6ICAwLjAwNDc2IFxuRi1zdGF0aXN0aWM6IDEuMzU5IG9uIDEgYW5kIDc0IERGLCAgcC12YWx1ZTogMC4yNDc1XG4ifQ== -->
+<pre><code>
+Call:
+lm(formula = Estimate ~ X99_Body_mass_average_8, data = valuesfin, 
+    weights = 1/`Std. Error`)
+
+Weighted Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.8210 -0.6601  0.1314  0.7675  1.9280 
+
+Coefficients:
+                          Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)             -0.0208813  0.0519325  -0.402    0.689
+X99_Body_mass_average_8 -0.0001206  0.0001034  -1.166    0.248
+
+Residual standard error: 1.031 on 74 degrees of freedom
+Multiple R-squared:  0.01803,   Adjusted R-squared:  0.00476 
+F-statistic: 1.359 on 1 and 74 DF,  p-value: 0.2475</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShtb2Rtb2JpbGl0eSlcbmBgYCJ9 -->
+<pre class="r"><code>summary(modmobility)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubG0oZm9ybXVsYSA9IEVzdGltYXRlIH4gbG9jYWxkaXNwZXJzZSwgZGF0YSA9IHZhbHVlc2Zpbiwgd2VpZ2h0cyA9IDEvYFN0ZC4gRXJyb3JgKVxuXG5XZWlnaHRlZCBSZXNpZHVhbHM6XG4gICAgIE1pbiAgICAgICAxUSAgIE1lZGlhbiAgICAgICAzUSAgICAgIE1heCBcbi0yLjgwMDA5IC0wLjYzMzU1ICAwLjA2MTA2ICAwLjc4MjU3ICAyLjAxMjA0IFxuXG5Db2VmZmljaWVudHM6XG4gICAgICAgICAgICAgICAgICBFc3RpbWF0ZSBTdGQuIEVycm9yIHQgdmFsdWUgUHIoPnx0fClcbihJbnRlcmNlcHQpICAgICAgICAgMC4yNzg2ICAgICAwLjMxMzQgICAwLjg4OSAgICAwLjM3N1xubG9jYWxkaXNwZXJzZVRSVUUgIC0wLjMzMDkgICAgIDAuMzE3MiAgLTEuMDQzICAgIDAuMzAwXG5cblJlc2lkdWFsIHN0YW5kYXJkIGVycm9yOiAxLjAzMyBvbiA3NCBkZWdyZWVzIG9mIGZyZWVkb21cbk11bHRpcGxlIFItc3F1YXJlZDogIDAuMDE0NDksXHRBZGp1c3RlZCBSLXNxdWFyZWQ6ICAwLjAwMTE3NCBcbkYtc3RhdGlzdGljOiAxLjA4OCBvbiAxIGFuZCA3NCBERiwgIHAtdmFsdWU6IDAuMzAwM1xuIn0= -->
+<pre><code>
+Call:
+lm(formula = Estimate ~ localdisperse, data = valuesfin, weights = 1/`Std. Error`)
+
+Weighted Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.80009 -0.63355  0.06106  0.78257  2.01204 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)         0.2786     0.3134   0.889    0.377
+localdisperseTRUE  -0.3309     0.3172  -1.043    0.300
+
+Residual standard error: 1.033 on 74 degrees of freedom
+Multiple R-squared:  0.01449,   Adjusted R-squared:  0.001174 
+F-statistic: 1.088 on 1 and 74 DF,  p-value: 0.3003</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShtb2Rsb2NhbG9ubHkpXG5gYGAifQ== -->
+<pre class="r"><code>summary(modlocalonly)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubG0oZm9ybXVsYSA9IEVzdGltYXRlIH4gbG9jYWxvbmx5LCBkYXRhID0gdmFsdWVzZmluLCB3ZWlnaHRzID0gMS9gU3RkLiBFcnJvcmApXG5cbldlaWdodGVkIFJlc2lkdWFsczpcbiAgICAgTWluICAgICAgIDFRICAgTWVkaWFuICAgICAgIDNRICAgICAgTWF4IFxuLTIuNzA5MTAgLTAuNjk2NjAgIDAuMDk2MjcgIDAuNzU3NDYgIDEuOTA4ODYgXG5cbkNvZWZmaWNpZW50czpcbiAgICAgICAgICAgICAgRXN0aW1hdGUgU3RkLiBFcnJvciB0IHZhbHVlIFByKD58dHwpXG4oSW50ZXJjZXB0KSAgIC0wLjAxNjEzICAgIDAuMDYxODUgIC0wLjI2MSAgICAwLjc5NVxubG9jYWxvbmx5VFJVRSAtMC4wNzE3MCAgICAwLjA5ODMzICAtMC43MjkgICAgMC40NjhcblxuUmVzaWR1YWwgc3RhbmRhcmQgZXJyb3I6IDEuMDM3IG9uIDc0IGRlZ3JlZXMgb2YgZnJlZWRvbVxuTXVsdGlwbGUgUi1zcXVhcmVkOiAgMC4wMDcxMzMsXHRBZGp1c3RlZCBSLXNxdWFyZWQ6ICAtMC4wMDYyODQgXG5GLXN0YXRpc3RpYzogMC41MzE2IG9uIDEgYW5kIDc0IERGLCAgcC12YWx1ZTogMC40NjgyXG4ifQ== -->
+<pre><code>
+Call:
+lm(formula = Estimate ~ localonly, data = valuesfin, weights = 1/`Std. Error`)
+
+Weighted Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.70910 -0.69660  0.09627  0.75746  1.90886 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)   -0.01613    0.06185  -0.261    0.795
+localonlyTRUE -0.07170    0.09833  -0.729    0.468
+
+Residual standard error: 1.037 on 74 degrees of freedom
+Multiple R-squared:  0.007133,  Adjusted R-squared:  -0.006284 
+F-statistic: 0.5316 on 1 and 74 DF,  p-value: 0.4682</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZm9vZCA8LSBicm9vbTo6Z2xhbmNlKG1vZGZvb2QpXG5oYWJpdGF0PC0gYnJvb206OmdsYW5jZShtb2RoYWJpdGF0KVxuc2l6ZTwtIGJyb29tOjpnbGFuY2UobW9kc2l6ZSlcbnNlZGVudGlzbTwtIGJyb29tOjpnbGFuY2UobW9kbW9iaWxpdHkpXG5sb2NhbG9ubHk8LSBicm9vbTo6Z2xhbmNlKG1vZGxvY2Fsb25seSlcblxub3V0cHV0czwtIGJpbmRfcm93cyhoYWJpdGF0LCBmb29kLCBzaXplLCBsb2NhbG9ubHkpXG5vdXRwdXRzJHRlc3QgPC0gYyhcIkhhYml0YXQgU3BlY2lhbGlzbVwiLCBcIkZvb2QgU3BlY2lhbGlzbVwiLCBcIkJvZHkgU2l6ZVwiLCBcIk9ibGlnYXRlIFNlZGVudGlzbVwiKVxuXG53cml0ZS5jc3Yob3V0cHV0cywgXCJPdXRwdXQvcmVzdWx0cy5jc3ZcIilcbnJlc3VsdHMgPC0gcmVhZC5jc3YoXCJPdXRwdXQvcmVzdWx0cy5jc3ZcIilcbmBgYCJ9 -->
+<pre class="r"><code>food &lt;- broom::glance(modfood)
+habitat&lt;- broom::glance(modhabitat)
+size&lt;- broom::glance(modsize)
+sedentism&lt;- broom::glance(modmobility)
+localonly&lt;- broom::glance(modlocalonly)
+
+outputs&lt;- bind_rows(habitat, food, size, localonly)
+outputs$test &lt;- c(&quot;Habitat Specialism&quot;, &quot;Food Specialism&quot;, &quot;Body Size&quot;, &quot;Obligate Sedentism&quot;)
+
+write.csv(outputs, &quot;Output/results.csv&quot;)
+results &lt;- read.csv(&quot;Output/results.csv&quot;)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -2486,32 +2604,19 @@ df&lt;- valuesfin %&gt;%
 food &lt;- ggplot(modfood, aes(foodspec, Estimate*-1)) + geom_point() + theme_bw() + xlab(&quot;Number of Feeding Guilds&quot;) + ylab(&quot;Modelled Response to Fire&quot;) + ggtitle(&quot;A&quot;)
 ggsave(&quot;Output/figures/foodmodel.PNG&quot;)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiU2F2aW5nIDkuNzkgeCA2LjM4IGluIGltYWdlXG4ifQ== -->
-<pre><code>Saving 9.79 x 6.38 in image</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiU2F2aW5nIDcgeCA3IGluIGltYWdlXG4ifQ== -->
+<pre><code>Saving 7 x 7 in image</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2l6ZSA8LSBnZ3Bsb3QobW9kc2l6ZSwgYWVzKFg5OV9Cb2R5X21hc3NfYXZlcmFnZV84LCBFc3RpbWF0ZSotMSkpICsgZ2VvbV9wb2ludCgpKyBzY2FsZV94X2xvZzEwKCkrIHRoZW1lX2J3KCkgKyB4bGFiKFwiQm9keSBNYXNzIChncmFtcylcIikgKyB5bGFiKFwiTW9kZWxsZWQgUmVzcG9uc2UgdG8gRmlyZVwiKSArIGdndGl0bGUoXCJEXCIpXG5nZ3NhdmUoXCJPdXRwdXQvZmlndXJlcy9zaXplbW9kZWwuUE5HXCIpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2l6ZSA8LSBnZ3Bsb3QobW9kc2l6ZSwgYWVzKFg5OV9Cb2R5X21hc3NfYXZlcmFnZV84LCBFc3RpbWF0ZSotMSkpICsgZ2VvbV9wb2ludCgpKyBzY2FsZV94X2xvZzEwKCkrIHRoZW1lX2J3KCkgKyB4bGFiKFwiQm9keSBNYXNzIChncmFtcylcIikgKyB5bGFiKFwiTW9kZWxsZWQgUmVzcG9uc2UgdG8gRmlyZVwiKSArIGdndGl0bGUoXCJEXCIpXG5nZ3NhdmUoXCJPdXRwdXQvZmlndXJlcy9zaXplbW9kZWwuUE5HXCIpXG5oYWIgPC0gZ2dwbG90KG1vZGhhYml0YXQsIGFlcyhoYWJpdGF0c3BlYywgRXN0aW1hdGUqLTEpKSArIGdlb21fcG9pbnQoKSsgdGhlbWVfYncoKSArIHhsYWIoXCJOdW1iZXIgb2YgSGFiaXRhdHNcIikgKyB5bGFiKFwiTW9kZWxsZWQgUmVzcG9uc2UgdG8gRmlyZVwiKSArIGdndGl0bGUoXCJCXCIpXG5nZ3NhdmUoXCJPdXRwdXQvZmlndXJlcy9oYWJpdGF0bW9kZWwuUE5HXCIpXG4jbW9iIDwtIGdncGxvdChtb2Rtb2JpbGl0eSwgYWVzKGxvY2FsZGlzcGVyc2UsIEVzdGltYXRlKi0xKSkgKyBnZW9tX3BvaW50KCkrIHRoZW1lX2J3KCkgKyB4bGFiKFwiTG9jYWxseSAjRGlzcGVyc2luZ1wiKSArIHlsYWIoXCJNb2RlbGxlZCBSZXNwb25zZSB0byBGaXJlXCIpXG4jZ2dzYXZlKFwiT3V0cHV0L2ZpZ3VyZXMvbW9iaWxpdHltb2RlbC5QTkdcIilcbmxvYyA8LSBnZ3Bsb3QobW9kbG9jYWxvbmx5LCBhZXMobG9jYWxvbmx5LCBFc3RpbWF0ZSotMSkpICsgZ2VvbV9wb2ludCgpICsgdGhlbWVfYncoKSArIHhsYWIoXCJTZWRlbnRhcnkgT25seVwiKSArIHlsYWIoXCJNb2RlbGxlZCBSZXNwb25zZSB0byBGaXJlXCIpICsgZ2d0aXRsZShcIkNcIilcbmdnc2F2ZShcIk91dHB1dC9maWd1cmVzL09zZWQuUE5HXCIpXG5gYGAifQ== -->
 <pre class="r"><code>size &lt;- ggplot(modsize, aes(X99_Body_mass_average_8, Estimate*-1)) + geom_point()+ scale_x_log10()+ theme_bw() + xlab(&quot;Body Mass (grams)&quot;) + ylab(&quot;Modelled Response to Fire&quot;) + ggtitle(&quot;D&quot;)
-ggsave(&quot;Output/figures/sizemodel.PNG&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiU2F2aW5nIDkuNzkgeCA2LjM4IGluIGltYWdlXG4ifQ== -->
-<pre><code>Saving 9.79 x 6.38 in image</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGFiIDwtIGdncGxvdChtb2RoYWJpdGF0LCBhZXMoaGFiaXRhdHNwZWMsIEVzdGltYXRlKi0xKSkgKyBnZW9tX3BvaW50KCkrIHRoZW1lX2J3KCkgKyB4bGFiKFwiTnVtYmVyIG9mIEhhYml0YXRzXCIpICsgeWxhYihcIk1vZGVsbGVkIFJlc3BvbnNlIHRvIEZpcmVcIikgKyBnZ3RpdGxlKFwiQlwiKVxuZ2dzYXZlKFwiT3V0cHV0L2ZpZ3VyZXMvaGFiaXRhdG1vZGVsLlBOR1wiKVxuYGBgIn0= -->
-<pre class="r"><code>hab &lt;- ggplot(modhabitat, aes(habitatspec, Estimate*-1)) + geom_point()+ theme_bw() + xlab(&quot;Number of Habitats&quot;) + ylab(&quot;Modelled Response to Fire&quot;) + ggtitle(&quot;B&quot;)
-ggsave(&quot;Output/figures/habitatmodel.PNG&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiU2F2aW5nIDkuNzkgeCA2LjM4IGluIGltYWdlXG4ifQ== -->
-<pre><code>Saving 9.79 x 6.38 in image</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI21vYiA8LSBnZ3Bsb3QobW9kbW9iaWxpdHksIGFlcyhsb2NhbGRpc3BlcnNlLCBFc3RpbWF0ZSotMSkpICsgZ2VvbV9wb2ludCgpKyB0aGVtZV9idygpICsgeGxhYihcIkxvY2FsbHkgI0Rpc3BlcnNpbmdcIikgKyB5bGFiKFwiTW9kZWxsZWQgUmVzcG9uc2UgdG8gRmlyZVwiKVxuI2dnc2F2ZShcIk91dHB1dC9maWd1cmVzL21vYmlsaXR5bW9kZWwuUE5HXCIpXG5sb2MgPC0gZ2dwbG90KG1vZGxvY2Fsb25seSwgYWVzKGxvY2Fsb25seSwgRXN0aW1hdGUqLTEpKSArIGdlb21fcG9pbnQoKSArIHRoZW1lX2J3KCkgKyB4bGFiKFwiU2VkZW50YXJ5IE9ubHlcIikgKyB5bGFiKFwiTW9kZWxsZWQgUmVzcG9uc2UgdG8gRmlyZVwiKSArIGdndGl0bGUoXCJDXCIpXG5nZ3NhdmUoXCJPdXRwdXQvZmlndXJlcy9Pc2VkLlBOR1wiKVxuYGBgIn0= -->
-<pre class="r"><code>#mob &lt;- ggplot(modmobility, aes(localdisperse, Estimate*-1)) + geom_point()+ theme_bw() + xlab(&quot;Locally #Dispersing&quot;) + ylab(&quot;Modelled Response to Fire&quot;)
+ggsave(&quot;Output/figures/sizemodel.PNG&quot;)
+hab &lt;- ggplot(modhabitat, aes(habitatspec, Estimate*-1)) + geom_point()+ theme_bw() + xlab(&quot;Number of Habitats&quot;) + ylab(&quot;Modelled Response to Fire&quot;) + ggtitle(&quot;B&quot;)
+ggsave(&quot;Output/figures/habitatmodel.PNG&quot;)
+#mob &lt;- ggplot(modmobility, aes(localdisperse, Estimate*-1)) + geom_point()+ theme_bw() + xlab(&quot;Locally #Dispersing&quot;) + ylab(&quot;Modelled Response to Fire&quot;)
 #ggsave(&quot;Output/figures/mobilitymodel.PNG&quot;)
 loc &lt;- ggplot(modlocalonly, aes(localonly, Estimate*-1)) + geom_point() + theme_bw() + xlab(&quot;Sedentary Only&quot;) + ylab(&quot;Modelled Response to Fire&quot;) + ggtitle(&quot;C&quot;)
 ggsave(&quot;Output/figures/Osed.PNG&quot;)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiU2F2aW5nIDkuNzkgeCA2LjM4IGluIGltYWdlXG4ifQ== -->
-<pre><code>Saving 9.79 x 6.38 in image</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShwYXRjaHdvcmspXG5wYXRjaDwtIChmb29kIHwgaGFiKS8obG9jIHwgc2l6ZSlcbnByaW50KHBhdGNoKVxuYGBgIn0= -->

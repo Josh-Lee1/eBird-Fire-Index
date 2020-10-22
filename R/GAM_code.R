@@ -37,6 +37,9 @@ b<-SpatialPointsDataFrame(cbind(data_df_with_date$LONGITUDE,data_df_with_date$LA
 bb<-spTransform(b,crs(fesm1000))
 data_df_with_date$sev<-extract(fesm1000,bb)
 
+data_df_with_date <- dplyr::filter(data_df_with_date, OBSERVATION.DATE>=2012-01-01)
+#something weird happening with this function but I checked the data and it's taking >=2010-01-01 so I guess run with it?
+
 process<-function(species_name,data_df=data_df_with_date){
   sl <- data_df %>%
     dplyr::filter(COMMON.NAME == species_name) %>%
